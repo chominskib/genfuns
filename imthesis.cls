@@ -80,8 +80,8 @@
 \ExecuteOptions{polish,lic,longabstract}
 \ProcessOptions\relax
 
-\RequirePackage[OT4]{fontenc}
-\RequirePackage{babel,titling,geometry}
+\RequirePackage{polski}
+\RequirePackage{titling,geometry}
 \geometry{margin=3cm,bindingoffset=1cm,a4paper,onecolumn,twoside}
 
 \pagestyle{headings}
@@ -113,9 +113,9 @@
     \renewcommand \chaptermark [1] {\markboth{\MakeUppercase{\appendixname\ \thechapter. ##1}}{}}
   }
   % Sterowanie lamaniem stron
-   \brokenpenalty=1000
-   \clubpenalty=1000
-   \widowpenalty=1000
+  \brokenpenalty=1000
+  \clubpenalty=1000
+  \widowpenalty=1000
 }{}
 
 % Bibliografia pojawia sie jako nienumerowany rozdzial w spisie tresci
@@ -182,7 +182,7 @@
 }
 
 \setlength{\parindent}{2em}
-%\setlength{\parskip}{1.5ex}
+\setlength{\parskip}{1.5ex}
 \renewcommand \baselinestretch {1.15}
 
 \newcommand \fmlinebreak { }
@@ -194,7 +194,12 @@
 
 \usepackage{tikz}
 
+\renewcommand{\selectlanguage}[1]{}
+
+\setcounter{tocdepth}{2}
+
 \AtBeginDocument{
+  \pagenumbering{roman}  
   \if@pol{\selectlanguage{polish}\old@title{\bfseries\@polishtitle\mdseries}}
          {\selectlanguage{english}\old@title{\bfseries\@englishtitle\mdseries}}
   \let\old@nd\and
@@ -220,4 +225,32 @@
   \tableofcontents
 }
 
+%poniższe usuwa sieroty <3
+\usepackage[nosingleletter]{impnattypo}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{theorem}{Twierdzenie}[section]
+\newtheorem{example}[theorem]{Przykład}
+\newtheorem{notexample}[theorem]{Antyprzykład}
+\newtheorem{lemma}[theorem]{Lemat}
+\newtheorem{definition}[theorem]{Definicja}
+\newtheorem{remark}[theorem]{Obserwacja}
+\newtheorem{corollary}[theorem]{Wniosek}
+\newtheorem{problem}[theorem]{Zadanie}
+\def\thetheorem {\thesection \arabic {theorem}}
+
+\newcommand{\id}{\text{id}}
+
+\newenvironment{solution}{\par
+\pushQED{\qed}%
+\normalfont \topsep6\p@\@plus6\p@\relax
+\trivlist
+\item\relax
+{\itshape
+Rozwiązanie\@addpunct{.}}\hspace\labelsep\ignorespaces
+}{%
+\popQED\endtrivlist\@endpefalse}
+
 \endinput
+

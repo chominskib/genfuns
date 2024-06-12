@@ -10,12 +10,27 @@
 \usetikzlibrary{patterns,decorations.pathreplacing}
 
 \polishtitle    {Funkcje tworzące}
-\englishtitle   {Generating functions}
-\polishabstract {\ldots}
-\englishabstract{\ldots}
+\englishtitle   {Generating Functions}
+\polishabstract {
+W niniejszej pracy chcielibyśmy przybliżyć temat funkcji tworzących, ich siostrzanych wykładniczych wersji oraz szeregów Dirichleta i zastosowań tych wszystkich obiektów w rozwiązywaniu zadań olimpijskich dla licealistów. 
+
+W sieci są dostępne inne materiały traktujące o funkcjach tworzących, jednak znane nam polskojęzyczne materiały nie są skierowane do licealistów, natomiast w przypadku materiałów anglojęzycznych bariera językowa może się okazać nieco większym problemem dla licealisty, niż dla studenta. Wobec tych faktów postanowiliśmy napisać niniejszą pracę.
+
+Ze względu na swój cel, praca została zaprojektowana w sposób, który pozwala na użycie jej jako materiału do samodzielnej nauki dla licealisty, który niekoniecznie zetknął się już z matematyką \emph{akademicką}.
+
+Praca składa się ze wstępów teoretycznych do potęgowych funkcji tworzących, wykładniczych funkcji tworzących oraz szeregów Dirichleta oraz przykładów zastosowań tych obiektów w zadaniach. W pracy zawarte są również ćwiczenia do rozwiązania przez Czytelnika wraz ze wskazówkami.
+}
+\englishabstract{
+In this article, we would like to present the topic of generating functions, their exponential versions, and Dirichlet series, along with the applications of all these objects in solving olympiad problems for high school students.
+
+There are other resources available online that discuss generating functions; however, the Polish-language materials known to us are not aimed at high school students, while, in the case of English-language materials, the language barrier may prove to be a somewhat greater problem for a high school student than for a university student. In light of these facts, we decided to write this paper.
+
+Given its purpose, the paper has been designed in such a way that it can be used as a self-study material for a high school student who may not have yet encountered \emph{academic} mathematics.
+
+The paper consists of theoretical introductions to power generating functions, exponential generating functions, and Dirichlet series, along with examples of applications of these objects in solving olympiad problems. The paper also includes exercises for the Reader to solve, along with hints.}
 \author         {Bartosz Chomiński}
 \advisor        {prof. dr hab. Dariusz Buraczewski}
-\date           {PROJEKT}
+\date           {12 czerwca 2024}
 % Dane do oswiadczenia o autorskim wykonaniu
 %\transcriptnum {}                     % Numer indeksu
 %\advisorgen    {dr. Jana Kowalskiego} % Nazwisko promotora w dopelniaczu
@@ -24,62 +39,1600 @@
 \begin{document}
 
 %%%%% POCZĄTEK ZASADNICZEGO TEKSTU PRACY
+\setcounter{chapter}{-1}
+\chapter{Przedmowa}
 
-\chapter{Szkic struktury pracy}
+W niniejszej pracy chcielibyśmy przybliżyć temat funkcji tworzących, ich siostrzanych wykładniczych wersji oraz szeregów Dirichleta i zastosowań tych wszystkich obiektów w rozwiązywaniu zadań olimpijskich dla licealistów. 
 
-\section{Przedmowa}
+W sieci są dostępne inne materiały traktujące o funkcjach tworzących, jednak znane nam polskojęzyczne materiały nie są skierowane do licealistów, lecz do studentów, tak więc często posługują się językiem wykraczającym nawet poza słownik ambitnego licealisty \cite{guzicki,sarbicki}. Dostępne są również wysokiej jakości materiały anglojęzyczne \cite{wilf1990generatingfunctionology,goemans}, w tym również dla licealistów \cite{evan,novakovic,zhao}, jednak bariera językowa może się okazać nieco większym problemem dla licealisty, niż dla studenta. 
 
-Celem jest napisanie wysokiej jakości materiału dydaktycznego celującego w ambitnego licealistę zaznajomionego z podstawowymi technikami używanymi na OM, który uczy czytelnika podstawowego warsztatu i zastosowań funkcji tworzących, wykładniczych funkcji tworzących i szeregów Dirichleta, a ponadto przekonuje go, że ta wiedza będzie przydatna.
+Podniesione wyżej fakty motywują nas do uznania, że na ,,rynku'' polskojęzycznych materiałów dla licealistów przygotowujących się do olimpiad matematycznych powstała w tytułowym temacie nisza, która motywuje napisanie niniejszej pracy. Ze względu na swój cel, praca została zaprojektowana w sposób, który pozwala na użycie jej jako materiału do samodzielnej nauki dla licealisty, który niekoniecznie zetknął się już z matematyką \emph{akademicką}.
 
-\section{Motywacja}
+Praca podzielona jest na sześć rozdziałów.
 
-Tu opowiem skąd bierze się potrzeba używania tego narzędzia. Najlepiej chyba jest to zrobić przedstawiając zadanie, które trudno rozwiązać inaczej, niż tą teorią.
+W pierwszym rozdziale zapoznajemy czytelnika z jednym z podstawowych zastosowań aparatu funkcji tworzących w postaci przykładowego zadania z rozwiązaniem korzystającym z tytułowej metody.
+
+W następnych trzech rozdziałach wprowadzamy od podstaw kolejno: potęgowe funkcje tworzące, wykładnicze funkcje tworzące oraz szeregi Dirichleta razem z ich podstawowymi zastosowaniami i ćwiczeniami dla czytelników.
+
+W przedostatnim rozdziale prezentujemy bardziej zaawansowane metody i twierdzenia (np. wymagające biegłości w posługiwaniu się liczbami zespolonymi), natomiast na koniec podajemy wskazówki do podanych w poprzednich rozdziałach ćwiczeń.
+
+\chapter{Wstęp}
+\pagenumbering{arabic}
+
+W tym materiale opiszemy jak posługiwać się w warunkach olimpijskich ciągami nieskończonymi i między innymi jak wyznaczać zwarte wzory ciągów rekurencyjnych.
+
+Główny obiekt, który pomoże nam w operowaniu ciągami nieskończonymi to \emph{funkcja tworząca}, która jest nieco inną postacią nieskończonego ciągu. Funkcja tworząca ciągu $(a_n)$ to nieskończona suma
+$$
+f(x) = a_0 + a_1x + a_2x^2 + a_3x^3 + \cdots.
+$$
+
+Dla przykładu funkcja tworząca ciągu geometrycznego $(1, \frac12, \frac14, \ldots)$ to
+$$
+f(x) = 1 + \frac{x}{2} + \frac{x^2}{4} + \frac{x^3}{8} + \ldots.
+$$
+Zauważmy, że prawa strona powyższego równania sama w sobie jest sumą wyrazów innego ciągu geometrycznego, $\left(1, \frac{x}{2}, \left(\frac{x}{2}\right)^2, \ldots\right)$, a zatem dla $\left|\frac{x}{2}\right| < 1$ możemy nieco uprościć powyższy zapis, korzystając ze wzoru na sumę ciągu geometrycznego:
+$$
+f(x) = \frac{1}{1 - \frac{x}{2}}.
+$$
+
+Pokażemy jak za pomocą funkcji tworzących rozwiązać poniższe zadanie o ciągach rekurencyjnych. 
+\begin{problem} \label{problem:wstep}
+Niech $(a_n)$ będzie ciągiem zdefiniowanym następująco:
+$$
+a_n = \begin{cases} 3a_{n-1} + 1, &\text{gdy $n \geq 1$;} \\ 0, &\text{gdy $n = 0$.} \end{cases}
+$$
+Wyznacz jawny wzór tego ciągu.
+\end{problem}
+\begin{solution}
+Niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$. Zamiast znajdować od razu wzór jawny na wyraz ciągu $(a_n)$, spróbujmy najpierw znaleźć wzór jawny funkcji $f$. Mamy
+\begin{align*}
+    f(x) &= a_0 + a_1x + a_2x^2 + a_3x^3 + a_4x^4 + \cdots \\
+    &= a_0 + (3a_0+1)x + (3a_1+1)x^2 + (3a_2+1)x^3 + (3a_3+1)x^4 + \cdots \\
+    &= a_0 + (x + x^2 + x^3 + x^4 + \cdots) + 3x(a_0 + a_1x + a_2x^2 + a_3x^3 + \cdots) \\
+    &= a_0 + x(1 + x + x^2 + x^3 + \cdots) + 3x f(x).
+\end{align*}
+
+Zauważmy, że po prawej stronie równania została nam nieskończona suma -- $1 + x + x^2 + x^3 + \cdots$, która ma zwarty wzór, bo jest to suma ciągu geometrycznego o ilorazie $x$, a zatem wiemy, że dla $|x| < 1$ zachodzi równość $1 + x + x^2 + x^3 + \cdots = \frac{1}{1-x}$ i podstawiając tę równość do wzoru na $f(x)$ mamy dalej
+\begin{align*}
+    f(x) &= \underbrace{a_0}_0 + \frac{x}{1-x} + 3x f(x) \\
+    (1-3x) f(x) &= \frac{x}{1-x} \\
+    f(x) &= \frac{x}{(1-x)(1-3x)}.
+\end{align*}
+
+Otrzymaliśmy zwarty wzór na $f$, więc teraz spróbujemy ,,odzyskać'' z niego jawny wzór na wyraz ciągu $(a_n)$. Wiemy, że jeśli funkcja tworząca ciągu jest postaci $g(x) = \frac{a}{1-qx}$, to ten ciąg jest ciągiem geometrycznym o wyrazie początkowym $a$ i ilorazie $q$. Spróbujmy więc zapisać wyrażenie $\frac{x}{(1-x)(1-3x)}$ jako sumę wyrażeń typu $\frac{a}{1-qx}$.
+
+Zacznijmy od wskazania odpowiednich $q$. Wiemy, że dla $x = 1$ oraz $x = \frac13$ wartość $f(x)$ jest nieokreślona, bo przy tych dwóch wyborach $x$ mianownik ułamka staje się zerem. Skoro tak, to podobnego zachowania dla $x = 1$ i $x = \frac13$ oczekujemy od sumy wyrażeń typu $\frac{a}{1-qx}$. Jedyny sposób, by takie zachowanie uzyskać, to zapewnić, by w tej sumie któryś z mianowników zerował się dla $x = 1$ i tak samo dla $x = \frac13$, a tak dzieje się, gdy w jednym ułamku $q = 1$, a w innym $q = 3$, zatem całe wyrażenie przyjmie postać
+$$
+\frac{x}{(1-x)(1-3x)} = \frac{b_1}{1-x} + \frac{b_2}{1-3x}.
+$$
+
+Przemnóżmy obustronnie przez $(1-x)(1-3x)$, pamiętając że dalsze równości nie muszą zachodzić dla $x = 1$ i $x = \frac13$. Mamy
+$$
+x = b_1(1-3x) + b_2(1-x)
+$$
+i stąd łatwo już wyznaczyć $b_1 = -\frac12$ i $b_2 = \frac12$. Wobec tego
+$$
+f(x) = \frac{b_1}{1-x} + \frac{b_2}{1-3x} = \frac12\left(\frac{1}{1-3x} - \frac{1}{1-x}\right).
+$$
+
+Wiemy, że $\frac{1}{1-3x}$ jest funkcją tworzącą ciągu $(1, 3, 3^2, 3^3, \ldots)$, natomiast $\frac{1}{1-x}$ jest funkcją tworzącą ciągu $(1, 1, 1, \ldots)$, a zatem, skoro dodawanie funkcji tworzących odpowiada dodawaniu ich ciągów, $f$ jest funkcją tworzącą ciągu
+$$
+a_n = \frac12 3^n - \frac12.\qedhere
+$$
+\end{solution}
+
+\chapter{Potęgowe funkcje tworzące}
 
 \section{Podstawy teorii}
 
-W każdej sekcji celem jest przedstawienie teorii do poziomu prostych lematów typu "$\mu * \mathbf{1} = \mathrm{id}$".
+W tej sekcji podamy formalne definicje funkcji tworzących i pokażemy dlaczego operowanie na funkcjach tworzących jest równoważne operowaniu na ciągach.
 
-\subsection{Funkcje tworzące}
+Na początek wprowadzimy (lub przypomnimy) kilka oznaczeń:
+$$
+\sum_{n=k}^\ell a_n = a_k + a_{k+1} + a_{k+2} + \cdots + a_{\ell-1} + a_\ell
+$$
+$$
+\prod_{n=k}^\ell a_n = a_k \cdot a_{k+1} \cdot a_{k+2} \cdot \ldots \cdot a_{\ell-1} \cdot a_\ell
+$$
 
-Definicje formalne, tłumaczenie kilku prostych ciągów nieskończonych na ich funkcje tworzące, podstawowy lemat o jednoznaczności zapisu, tłumaczenie działań na ciągach na działania na funkcjach, splot Cauchy'ego.
+Przejdźmy do rzeczy.
 
-\subsection{Wykładnicze funkcje tworzące}
+\begin{definition}
+    \emph{Funkcja tworząca} ciągu $(a_n)$ to wyrażenie postaci
+    $$
+    f(x) = a_0 + a_1x + a_2x^2 + a_3x^3 + \cdots = \sum_{n=0}^\infty a_nx^n.
+    $$
+\end{definition}
 
-Definicje formalne, tłumaczenie kilku prostych ciągów nieskończonych na ich funkcje tworzące, podstawowy lemat o jednoznaczności zapisu, tłumaczenie działań na ciągach na działania na funkcjach.
+W powyższej definicji piszemy o $f$ jako o \emph{wyrażeniu}, a nie jako \emph{funkcji}, ponieważ często będzie zdarzać się tak, że obliczenie $f$ na konkretnej wartości $x$ będzie prowadzić do nieokreślonego wyniku, bo będzie to np. sumowanie nieskończenie wielu jedynek. 
 
-\subsection{Szeregi Dirichleta}
+Czasami będziemy ostrożnie podstawiać konkretne wartości za $x$, jednak w zdecydowanej większości przypadków będziemy się zadowalać jedynie czysto algebraicznymi własnościami wyrażeń stanowiących funkcje tworzące; tak właśnie było w rozwiązaniu zadania \ref{problem:wstep} -- nigdy nie rozważaliśmy żadnej konkretnej własności \emph{liczbowej} $f(x)$, korzystaliśmy tylko z przekształceń algebraicznych.
 
-Definicje formalne, tłumaczenie kilku prostych ciągów nieskończonych na ich szeregi Dirichleta, podstawowy lemat o jednoznaczności zapisu, tłumaczenie działań na ciągach na działania na szeregach, funkcje multiplikatywne, splot Dirichleta, algebra splotu.
+Zwarty wzór funkcji to wyrażenie algebraiczne, które można zapisać skończoną liczbą symboli bez sum i iloczynów nieskończonych -- np. $2x$, $\frac{5}{x-7}$, $\sqrt{1+2^{7x+5}}$. Niektóre funkcje tworzące mają zwarte wzory, np. $f(x) = \frac12\left(\frac{1}{1-3x}-\frac{1}{1-x}\right)$ ze wstępu, ale nie każda funkcja tworząca ma swój zwarty wzór. W poniższej definicji sformalizujemy związek funkcji tworzącej i jej zwartego wzoru.
 
-\subsection{Podsumowanie porównawcze}
+\begin{definition} \label{def:expr}
+    Niech $f(x)$ będzie funkcją \textbf{tworzącą} ciągu $(a_n)$, niech $t > 0$ będzie liczbą rzeczywistą i niech $g(x)$ będzie ,,zwykłą'' funkcją o dziedzinie $(-t, t)$ ze zwartym wzorem algebraicznym (np. $\frac{45+2^x}{\sqrt{6-x^2}}$).
+    
+    Funkcja tworząca $f(x)$ ma wzór funkcji $g(x)$, gdy suma
+    $$
+    a_0 + a_1x + a_2x^2 + a_3x^3 + a_4x^4 + \cdots
+    $$
+    jest określona i równa $g(x)$ dla każdej liczby rzeczywistej $x$ z przedziału $(-t, t)$.
+\end{definition}
 
-Tabela o czterech kolumnach: działanie na ciągach, działanie na funkcjach tworzących, działanie na wykładniczych funkcjach tworzących, działanie na szeregach Dirichleta.
+Przyjmijmy na razie, że operacje na funkcjach tworzących ze zwartymi wzorami naturalnie odpowiadają operacjom na tych wzorach. Więcej informacji o problemach związanych z sumowaniem nieskończonej liczby składników w definicji funkcji tworzącej można znaleźć w sekcji \ref{section:convergence}. 
 
-Wśród działań: dodawanie, mnożenie przez skalar, translacja, splot Cauchy'ego, mnożenie przez konkretne ciągi, etc.
+Przejdźmy do podstaw operowania na funkcjach tworzących.
+
+\begin{definition} \label{def:rowne}
+    Funkcja tworząca $f(x)$ (ciągu $(a_n)$) jest \emph{równa} funkcji tworzącej $g(x)$ (ciągu $(b_n)$), gdy dla każdego $n \in \{0, 1, 2, \ldots\}$ zachodzi równość
+    $$
+    a_n = b_n.
+    $$
+\end{definition}
+
+\begin{corollary}
+    Z definicji \ref{def:rowne} wynika, że każda funkcja tworząca odpowiada dokładnie jednemu ciągowi.
+\end{corollary}
+
+\begin{definition}
+    \emph{Suma} funkcji tworzących $f(x)$ (ciągu $(a_n)$) i $g(x)$ (ciągu $(b_n)$) to funkcja tworząca $(f+g)(x)$ ciągu $(c_n)$ zdefiniowanego jako $c_n = a_n+b_n$ dla wszystkich $n \in \{0, 1, 2, \ldots\}$.
+\end{definition}
+
+\begin{definition}
+    \emph{Iloczyn} funkcji tworzącej $f(x)$ (ciągu $(a_n)$) i liczby $\alpha$ to funkcja tworząca $(\alpha f)(x)$ ciągu $(b_n)$ zdefiniowanego jako $b_n = \alpha \cdot a_n$ dla wszystkich $n \in \{0, 1, 2, \ldots\}$.
+\end{definition}
+
+\begin{definition}
+    \emph{Przesunięcie w prawo} funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $xf(x)$ ciągu $(b_n)$ zdefiniowanego jako $b_0 = 0$ i $b_n = a_{n-1}$ dla wszystkich $n \in \{1, 2, \ldots\}$.
+\end{definition}
+
+\begin{definition}
+    \emph{Przesunięcie w lewo} funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $\frac{f(x)-f(0)}{x}$ ciągu $(b_n)$ zdefiniowanego jako $b_n = a_{n+1}$ dla wszystkich $n \in \{0, 1, 2, \ldots\}$.
+\end{definition}
+
+Powyższe definicje były raczej techniczne i niezbyt zaskakujące. Następujące dwie definicje pokazują, że niektóre działania wyrażają się bardziej naturalnie w języku funkcji tworzących, niż w języku ciągów nieskończonych.
+
+\begin{definition}
+    \emph{Splot Cauchy'ego} dwóch ciągów nieskończonych $(a_n)$ i $(b_n)$ to ciąg $(c_n)$ o wyrazie zdefiniowanym jako
+    $$
+    c_n = \sum_{k=0}^n a_k b_{n-k}.
+    $$
+    Splot Cauchy'ego ciągów $(a_n)$ i $(b_n)$ oznaczamy w tym materiale jako $(a_n) *^C (b_n)$.
+\end{definition}
+
+\begin{definition}
+    \emph{Iloczyn} funkcji tworzących $f(x)$ (ciągu $(a_n)$) i $g(x)$ (ciągu $(b_n)$) to funkcja tworząca $(fg)(x)$ ciągu $(c_n)$ zdefiniowanego jako splot Cauchy'ego ciągów $(a_n)$ i $(b_n)$.
+\end{definition}
+
+Uzasadnienie wystąpienia splotu Cauchy'ego w powyższej definicji może być nieoczywiste, dlatego pokażemy w jaki sposób z własności algebraicznych funkcji tworzących wynika, że to \textbf{musi} być splot Cauchy'ego. 
+
+Niech $f(x)$ i $g(x)$ będą funkcjami tworzącymi dla ciągów odpowiednio $(a_n)$ i $(b_n)$. Mamy
+\begin{align*}
+    f(x)g(x) &= (a_0 + a_1x + a_2x^2 + a_3x^3 + \cdots)(b_0 + b_1x + b_2x^2 + b_3x^3 + \cdots)
+\end{align*}
+
+Współczynnik przy $x^n$ w powyższym iloczynie wyznaczymy przechodząc po wszystkich możliwych wyborach $a_kx^k$ z pierwszego nawiasu i $b_\ell x^\ell$ z drugiego nawiasu, tak by wykładnik przy $x$ w ich iloczynie był równy $n$. Wobec tego współczynnik przy $x^n$ (oznaczmy go jako $c_n$) wyraża się wzorem
+$$
+c_n = \sum_{\substack{(k, l) \in \mathbb{N}^2 \\ k + \ell = n}} a_k b_\ell = \sum_{k=0}^n a_k b_{n-k}.
+$$
+
+\begin{example} \label{example:1234Cauchy}
+    Pokażemy jak za pomocą splotu Cauchy'ego wyznaczyć funkcję tworzącą ciągu $(a_n) = (1, 2, 3, 4, \ldots)$.
+    
+    Niech $(b_n) = (1, 1, 1, \ldots)$. Niech $(c_n) = (b_n) *^C (b_n)$, wówczas 
+    $$
+    c_n = \sum_{k=0}^n b_k b_{n-k} = \sum_{k=0}^n 1 \cdot 1 = \sum_{k=0}^n 1 = n+1,
+    $$
+    czyli ciąg $(c_n)$ jest równy ciągowi $(a_n)$.
+    
+    Przejdźmy teraz na język funkcji tworzących. Niech $g(x) = \frac{1}{1-x}$ będzie funkcją tworzącą ciągu $(b_n)$ i niech $f(x)$ będzie funkcją tworzącą ciągu $(c_n)$. Skoro $(c_n) = (b_n) *^C (b_n)$, to
+    \begin{align*}
+    f(x) &= g(x) \cdot g(x) \\
+    f(x) &= \frac{1}{1-x} \cdot \frac{1}{1-x} \\
+    f(x) &= \frac{1}{(1-x)^2}
+    \end{align*}
+    i to jest szukana funkcja tworząca.
+
+    Zauważmy, że teraz, oprócz ciągów geometrycznych, potrafimy wyrażać w terminach funkcji tworzących również ciągi arytmetyczne -- zachęcamy Czytelnika do sprawdzenia, że ciąg arytmetyczny o wyrazie początkowym $a$ i różnicy $r$ ma funkcję tworzącą $\frac{a}{1-x} + \frac{rx}{(1-x)^2}$.
+\end{example}
+
+Oprócz podstawowych operacji algebraicznych na funkcjach tworzących przyda nam się operacja różniczkowania.
+
+\begin{definition}
+    \emph{Pochodna} funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $f'(x)$ ciągu $(c_n)$ zdefiniowanego jako $c_n = (n+1)a_{n+1}$.
+\end{definition}
+
+Pokażemy skąd bierze się taka definicja ciągu $(c_n)$.
+
+Niech $f(x)$ będzie funkcją tworzącą dla ciągu $(a_n)$. Użyjemy pochodnej na każdym składniku funkcji tworzącej $f$ z osobna:
+\begin{align*}
+    f'(x) &= (a_0 + a_1x + a_2x^2 + a_3x^3 + \cdots)' \\
+    &= (a_0)' + (a_1x)' + (a_2x^2)' + (a_3x^3)' + \cdots \\
+    &= a_1 + 2a_2x + 3a_3x^2 + \cdots.
+\end{align*}
+
+Analogicznie możemy zdefiniować całkowanie funkcji tworzącej. 
+
+\begin{definition}
+    \emph{Całka} funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $\int f(x)$ ciągu $(c_n)$ zdefiniowanego jako 
+    $$
+    c_n = \begin{cases} \frac{a_{n-1}}{n}, &\text{gdy $n \geq 1$,} \\ 0, &\text{gdy $n = 0$.} \end{cases}
+    $$
+\end{definition}
+
+\begin{example}
+    Pokażemy jak za pomocą pochodnej wyznaczyć funkcję tworzącą ciągu $(a_n) = (1, 2, 3, 4, \ldots)$ (jak w przykładzie \ref{example:1234Cauchy}).
+    
+    Niech $(b_n) = (1, 1, 1, \ldots)$. Funkcja tworząca tego ciągu, $g(x)$, będzie równa $\frac{1}{1-x}$.
+
+    Zauważmy, że $a_n = n+1 = (n+1)b_{n+1}$, a zatem funkcja tworząca ciągu $(a_n)$ będzie równa $g'(x)$. Mamy
+    \begin{align*}
+    g'(x) = \left[\frac{1}{1-x}\right]' = \frac{1}{(1-x)^2}
+    \end{align*}
+    i to jest szukana funkcja tworząca.
+\end{example}
 
 \section{Zastosowania}
 
-Tu opowiem o kilku przykładach zastosowań funkcji tworzących: rozwiązywanie rekurencji liniowych, wzór ogólny na liczby Catalana, jedno-dwa zadania z OM, funkcje charakterystyczne zmiennych losowych.
+\subsection{Poprawne nawiasowania}
+    Obliczymy ile jest \emph{poprawnych nawiasowań} długości $2n$. Najpierw zdefiniujemy bądź przypomnimy definicję poprawnego nawiasowania.
 
-\section{Zaawansowane metody}
+    \begin{definition} \label{def:nawiasy}
+    \emph{Poprawne nawiasowanie} definiujemy rekurencyjnie jako:
+    \begin{itemize}
+        \item słowo puste lub
+        \item \texttt{(}$S$\texttt{)}, gdzie $S$ jest innym poprawnym nawiasowaniem lub
+        \item złączenie słów $S$ i $T$, gdzie $S$ i $T$ są poprawnymi nawiasowaniami.
+    \end{itemize}
+    \end{definition}
+    \begin{example}
+        Słowa \texttt{()}, \texttt{()()}, \texttt{((()))} są poprawnymi nawiasowaniami, natomiast słowa \texttt{(}, \texttt{())}, \texttt{)(} nie są.
+    \end{example}
 
-Tu opowiem o kilku ciekawszych metodach związanych z funkcjami tworzącymi: roots of unity filters, snake oil method, formuła inwersyjna Lagrange'a.
+    Niech $C_n$ oznacza liczbę poprawnych nawiasowań długości $2n$. Na podstawie definicji \ref{def:nawiasy} możemy ułożyć zależność rekurencyjną na $C_n$ i (mamy nadzieję) rozwiązać tę rekurencję za pomocą funkcji tworzących.
 
-\section{Zadania do samodzielnego rozwiązania}
+    O poprawnym nawiasowaniu, którego nie da się zapisać jako złączenie dwóch niepustych poprawnych nawiasowań powiemy, że jest \emph{pierwotne}. Niech $P_n$ oznacza liczbę pierwotnych poprawnych nawiasowań długości $2n$. Pierwotne poprawne nawiasowanie jest albo nawiasowaniem pustym, albo daje się zapisać jako \texttt{(}$S$\texttt{)}, gdzie $S$ jest poprawnym nawiasowaniem, a zatem
+    $$
+    P_n = \begin{cases} C_{n-1}, &\text{gdy $n \geq 1$}; \\ 1, &\text{gdy $n = 0$.} \end{cases}
+    $$
+    
+    Podzielmy wszystkie nawiasowania długości $2n$ (dla $n \geq 1$) ze względu na długość ich najkrótszego niepustego prefiksu będącego pierwotnym poprawnym nawiasowaniem. Mamy wówczas
+    $$
+    C_n = \sum_{m=1}^n P_m C_{n-m} = \sum_{m=1}^n C_{m-1}C_{n-m}.
+    $$
 
-Garstka około 20 zadań typu olimpijskiego i kilku wykraczających poza szkołę średnią, które dają się efektownie rozwiązać narzędziami opisanymi powyżej.
+    Otrzymaliśmy wzór przypominający splot Cauchy'ego, jednak indeksy po prawej stronie sumują się do $n-1$ zamiast do $n$. Możemy sobie z tym poradzić całkiem prosto -- niech $D_{n+1} = C_n$ dla $n \geq 0$ i $D_0 = 0$. Wówczas powyższa równość przyjmie postać
+    $$
+    D_{n+1} = \sum_{m=1}^n D_mD_{n-m+1},
+    $$
+    czyli równoważnie
+    $$
+    D_n = \sum_{m=1}^{n-1} D_mD_{n-m}.
+    $$
+    Po prawej stronie brakuje nam składników $D_0D_n$ i $D_nD_0$, bo z nimi dostaniemy sumę z definicji splotu Cauchy'ego. Szczęśliwie okazuje się, że skoro $D_0 = 0$, to brakujące składniki są zawsze równe zeru. 
+    
+    Wzór na $D_n$ otrzymany powyżej nie działa dla $n = 1$, ponieważ wzór na $C_n$ nie działa dla $n = 0$. Możemy to naprawić upewniając się, że współczynnik stojący przy $x^1$ jest odpowiedni. Mamy więc
+    $$
+    (D_n) = (0, 1, 0, 0, \ldots) + (D_n) *^C (D_n),
+    $$
+    a zatem niech $g(x)$ będzie funkcją tworzącą ciągu $(D_n)$ -- wówczas
+    $$
+    g(x) = x + g(x) \cdot g(x).
+    $$
+    Niech $f(x)$ będzie funkcją tworzącą dla ciągu $(C_n)$. Zauważmy, że skoro ciąg $(D_n)$ zdefiniowaliśmy jako przesunięcie ciągu $(C_n)$ w prawo o jeden, to między funkcjami tworzącymi tych ciągów zajdzie zależność $xf(x) = g(x)$. Wobec tego mamy
+    \begin{gather*}
+    xf(x) = x + xf(x) \cdot xf(x) \\
+    x\left(f(x) - 1 - xf(x) \cdot f(x)\right) = 0.
+    \end{gather*}
+    Zauważmy, że jedyną funkcją tworzącą, która pomnożona przez $x$ daje $0$ jest funkcja zerowa. Wobec tego
+    \begin{gather*}
+    f(x) - 1 - xf(x) \cdot f(x) = 0 \\
+    0 = 1 - f(x) + x (f(x))^2.
+    \end{gather*}
+    Uzyskaliśmy równanie kwadratowe na $f(x)$! Jako że standardowa metoda rozwiązywania równań kwadratowych jest czysto algebraiczna, możemy zastosować ją i tutaj. Wtedy otrzymamy dwa rozwiązania:
+    $$
+    f_1(x) = \frac{1-\sqrt{1-4x}}{2x}
+    \quad \text{oraz} \quad
+    f_2(x) = \frac{1+\sqrt{1-4x}}{2x}.
+    $$
 
-\section{Rozwiązania zadań}
+    Jedno z nich na pewno działa, a drugie na pewno nie działa (bo każdy ciąg ma dokładnie jedną funkcję tworzącą). Zauważmy, że podstawienie do funkcji tworzącej $x = 0$ daje wynik równy zerowemu wyrazowi ciągu. Wiemy, że $C_0 = 1$, ale nie możemy podstawić bezpośrednio $x = 0$ do wzorów na $f_1(x)$ i $f_2(x)$, ponieważ w obu wyzerowałby się mianownik. Możemy jednak zauważyć, że funkcję $f_1(x)$ da się zapisać dla $x \leq \frac14$ jako
+    $$
+    f_1(x) = \frac{1-\sqrt{1-4x}}{2x} = \frac{1-(1-4x)}{1+\sqrt{1-4x}} \cdot \frac{1}{2x} = \frac{4x}{2x(1+\sqrt{1-4x})} = \frac{2}{1+\sqrt{1-4x}},
+    $$
+    a zatem funkcja $f_1(x)$ ma algebraicznie równoważną postać, w której $f_1(0) = 1$. Funkcja $f_2(x)$ nie ma takiej postaci, ponieważ ma asymptotę $x = 0$. Stąd $f_1(x)$ jest szukaną funkcją tworzącą. 
+    
+    Pozostaje więc odzyskać wzór jawny ciągu $(C_n)$ z funkcji tworzącej $f_1(x)$. Ze względu na pierwiastek w definicji $f_1(x)$ raczej nie uda nam się zapisać tej funkcji jako sumy wyrażeń postaci $\frac{a}{1-qx}$. Spróbujmy więc inaczej.
+    
+    \begin{definition}
+    Niech $\alpha$ będzie liczbą rzeczywistą i niech $n \geq 1$ będzie liczbą naturalną. Wówczas liczbę
+    $$
+    {\alpha \choose n} = \frac{\alpha(\alpha-1)\cdot\ldots\cdot(\alpha-n+1)}{n!}
+    $$
+    nazwiemy \emph{uogólnionym współczynnikiem Newtona}. Ponadto przyjmujemy, że
+    $$
+    {\alpha \choose 0} = 1.
+    $$
+    \end{definition}
+    
+    \begin{lemma}
+    Niech $x$ i $\alpha$ będą dowolnymi liczbami rzeczywistymi. Zachodzi równość
+    $$
+    (1+x)^\alpha = \sum_{n=0}^\infty {\alpha \choose n} x^n. 
+    $$
+    Tę równość nazywamy \emph{wzorem Newtona}.
+    \end{lemma}
+    Dowód tego lematu wykracza poza zakres tego materiału i wymaga wiedzy w zakresie szeregów Taylora i rachunku różniczkowego.
+    
+    Możemy skorzystać z powyższego lematu, żeby rozwinąć $\sqrt{1-4x}$ do sumy potęg $x$ ze współczynnikami, co pozwoli nam wyznaczyć wzór jawny ciągu o funkcji tworzącej $f_1(x)$. Mamy
+    $$
+    f_1(x) = \frac{1-\sqrt{1-4x}}{2x} = \frac{1-(1-4x)^{1/2}}{2x} = \frac{1-\sum_{n=0}^\infty {1/2 \choose n} (-4x)^n}{2x} = \sum_{n=0}^\infty \left(-\frac12\right){1/2 \choose n+1} (-4)^{n+1} x^n.
+    $$
+    
+    Moglibyśmy w tym miejscu zakończyć rozwiązanie i stwierdzić, że $C_n = \left(-\frac12\right){1/2 \choose n+1} (-4)^{n+1}$, ale spróbujmy znaleźć prostszą postać tego wzoru. Mamy
+    \begin{align*}
+    C_n &= \left(-\frac12\right){1/2 \choose n+1} (-4)^{n+1} \\
+    &= \frac12 \cdot {1/2 \choose n+1} (-1)^n \cdot 4^{n+1} \\
+    &= \frac12 \cdot \frac{(1/2)(1/2-1)\cdot\ldots\cdot(1/2-n)}{(n+1)!} \cdot (-1)^n \cdot 4^{n+1} \\
+    &= \frac12 \cdot \frac{1(1-2)(1-4)\cdot\ldots\cdot(1-2n)}{(n+1)!} \cdot (-1)^n \cdot 2^{n+1} \\
+    &= \frac12 \cdot \frac{1(2-1)(4-1)\cdot\ldots\cdot(2n-1)}{(n+1)!} \cdot 2^{n+1} \\
+    &= \frac12 \cdot \frac{1\cdot3\cdot5\cdot\ldots\cdot(2n-1)}{(n+1)!} \cdot 2^{n+1} \\
+    &= \frac{1\cdot3\cdot5\cdot\ldots\cdot(2n-1)}{n!} \cdot 2^n \cdot \frac{1}{n+1}
+    \end{align*}
+    Teraz możemy (nieco sztucznie) przemnożyć całe wyrażenie przez $\frac{2\cdot4\cdot6\cdot\ldots\cdot(2n)}{2\cdot4\cdot6\cdot\ldots\cdot(2n)} = 1$. To nie zmieni wyniku, bo mnożymy przez jedynkę, a pozwoli nam uzupełnić iloczyn kolejnych liczb nieparzystych w liczniku do silni.
+    \begin{align*}
+    &= \frac{1\cdot3\cdot5\cdot\ldots\cdot(2n-1)}{n!} \cdot \frac{2\cdot4\cdot6\cdot\ldots\cdot(2n)}{2\cdot4\cdot6\cdot\ldots\cdot(2n)} \cdot 2^n \cdot \frac{1}{n+1}\\
+    &= \frac{1\cdot3\cdot5\cdot\ldots\cdot(2n-1)}{n!} \cdot \frac{2\cdot4\cdot6\cdot\ldots\cdot(2n)}{1\cdot2\cdot3\cdot\ldots\cdot n} \cdot \frac{1}{n+1}\\
+    &= \frac{1\cdot2\cdot3\cdot4\cdot5\cdot6\cdot\ldots\cdot(2n-1)(2n)}{n!(1\cdot2\cdot3\cdot\ldots\cdot n)} \cdot \frac{1}{n+1}\\
+    &= \frac{(2n)!}{n!n!} \cdot \frac{1}{n+1}\\
+    &= \frac{{2n \choose n}}{n+1}.
+    \end{align*}
+    Uzyskaliśmy znacznie prostszą postać, tak więc liczba poprawnych nawiasowań długości $2n$ wynosi $C_n = \frac{{2n \choose n}}{n+1}$. Ta liczba jest też nazywana $n$-tą liczbą Catalana.
 
-Rozsądnej jakości i dokładności rozwiązania do powyższych zadań.
+\subsection{Rozwiązywanie rekurencji}
 
-\section{Podziękowania}
+    W tej sekcji nauczymy się jak za pomocą funkcji tworzących rozwiązywać bardziej skomplikowane rekurencje, poczynając od liczb Fibonacciego o wzorze rekurencyjnym $F_{n+2} = F_{n+1} + F_n$, przechodząc przez rekurencje o większej głębokości (np. $G_{n+3} = 7G_{n+2} + 3G_{n+1} - G_n$), a kończąc na rekurencjach, które w swych wzorach odwołują się również do wielkości indeksu (np. $H_n = H_{n-1} + H_{n-2} + n^2$).
 
-	Autor podziękuje tu kilku osobom, które spotkał w czasie studiowania.
+    Zacznijmy od definicji i przykładu.
 
-\ldots
+    \begin{definition}
+    \emph{Ułamek prosty} to ułamek postaci
+    $$
+    \frac{A}{(x-p)^n},
+    $$
+    gdzie $A$ i $p$ są liczbami zespolonymi (w szczególności mogą to być liczby rzeczywiste), a $n$ jest liczbą naturalną.
+    \end{definition}
 
-%%%%% BIBLIOGRAFIA
+    W szczególności ułamkami prostymi są też takie wyrażenia, które nie wpasowują się na pierwszy rzut oka w tę definicję -- przykładowo
+    $$
+    \frac{1}{2-7x} = \frac{-\frac17}{x-\frac27}
+    \quad\text{lub}\quad
+    \frac{4-2x}{x^3-8x^2+21x-18} = \frac{-2(x-2)}{(x-2)(x-3)^2} = \frac{-2}{(x-3)^2}.
+    $$
+
+    Pokażemy teraz jak wyznaczyć wzór jawny na liczby Fibonacciego.
+
+    \begin{example}
+    Niech $(a_n)$ będzie ciągiem zdefiniowanym jako $a_0 = 0$, $a_1 = 1$ oraz $a_{n+2} = a_{n+1} + a_n$. Niech $f(x)$ będzie jego funkcją tworzącą. Mamy wówczas
+    \begin{align*}
+        f(x) &= \sum_{n=0}^\infty a_nx^n \\
+        &= x + \sum_{n=2}^\infty a_nx^n \\
+        &= x + \sum_{n=0}^\infty a_{n+2}x^{n+2} \\
+        &= x + \sum_{n=0}^\infty (a_{n+1} + a_n)x^{n+2} \\
+        &= x + x\sum_{n=1}^\infty a_nx^n + x^2\sum_{n=0}^\infty a_nx^n \\
+        &= x + x\sum_{n=0}^\infty a_nx^n + x^2\sum_{n=0}^\infty a_nx^n \\
+        &= x + x f(x) + x^2 f(x),
+    \end{align*}
+    czyli
+    $$
+    f(x) = \frac{x}{1-x-x^2}.
+    $$
+    Rozłóżmy ten ułamek na ułamki proste. Analogicznie jak w rozdziale Wstęp, mianowniki ułamków prostych muszą się zerować dla tych samych wartości $x$, dla których zeruje się mianownik ich sumy. Wobec tego spodziewamy się rozkładu
+    $$
+    f(x) = \frac{x}{1-x-x^2} = \frac{A}{1-\frac{1+\sqrt{5}}{2}x} + \frac{B}{1-\frac{1-\sqrt{5}}{2}x}.
+    $$
+    Po przemnożeniu obu stron powyższego równania przez $1-x-x^2$ wyznaczamy $A = \frac{1}{\sqrt{5}}$ oraz $B = -\frac{1}{\sqrt{5}}$. Znamy ciągi odpowiadające funkcjom tworzącym $\frac{1}{1-\frac{1+\sqrt{5}}{2}x}$ oraz $\frac{1}{1-\frac{1-\sqrt{5}}{2}x}$, zatem możemy zapisać ostateczny wynik:
+    $$
+    a_n = \frac{1}{\sqrt{5}} \left(\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right).
+    $$
+    Ten wzór nazywany jest wzorem Bineta.
+    \end{example}
+
+    Uogólnijmy nieco powyższą metodę. W tym celu przekonajmy się, że rozkład na ułamki proste zawsze istnieje.
+
+    \begin{lemma} \label{lemma:partialfracs}
+    Niech $Q(x)$ będzie wielomianem o współczynnikach zespolonych stopnia $n$. Niech $P(x)$ będzie wielomianem stopnia mniejszego od $n$. Wówczas ułamek
+    $$
+    \frac{P(x)}{Q(x)}
+    $$
+    da się zapisać jako sumę ułamków prostych.
+    \end{lemma}
+    \begin{proof}
+    Niech $k$ będzie liczbą miejsc zerowych wielomianu $Q(x)$. Dowód przeprowadzimy indukcyjnie względem $k$.
+
+    Dla $k = 1$ możemy przyjąć, że $Q(x) = c(x-p)^t$. Niech $R(x)$ będzie takim wielomianem, że $R(x) = P(x+p)$ i niech $r_0, r_1, \ldots, r_\ell$ będą współczynnikami tego wielomianu ($R(x) = r_\ell x^\ell + r_{\ell-1}x^{\ell-1} + \cdots + r_1x + r_0$). Wtedy możemy zapisać
+    \begin{gather*}
+    \frac{P(x)}{Q(x)} = \frac{R(x-p)}{c(x-p)^t} = \frac{r_\ell (x-p)^\ell + r_{\ell-1}(x-p)^{\ell-1} + \cdots + r_1(x-p) + r_0}{c(x-p)^t} = \\
+    = \frac{r_\ell/c}{(x-p)^{t-\ell}} + \frac{r_{\ell-1}/c}{(x-p)^{t-\ell+1}} + \cdots + \frac{r_0/c}{(x-p)^t},
+    \end{gather*}
+    a zatem otrzymaliśmy rozkład na ułamki proste.
+
+    Załóżmy, że teza lematu działa dla wszystkich wielomianów $Q(x)$, które posiadają co najwyżej $m$ miejsc zerowych. Pokażemy, że wtedy teza lematu działa również dla tych wielomianów $Q(x)$, które mają $m+1$ miejsc zerowych.
+
+    Niech $Q(x) = (x-p)^t \cdot S(x)$, gdzie $S(x)$ jest wielomianem o $m$ miejscach zerowych, dla którego $p$ nie jest miejscem zerowym. Szukamy teraz wielomianu $T(x)$ o stopniu mniejszym od $n-t$ i wielomianu $A(x)$ o stopniu mniejszym od $t$, dla których zachodzi równość
+    $$
+    \frac{P(x)}{Q(x)} = \frac{T(x)}{S(x)} + \frac{A(x)}{(x-p)^t}.
+    $$
+
+    Przemnóżmy obie strony powyższej równości przez $Q(x)$. Otrzymamy wtedy równoważną równość
+    \begin{gather*}
+    P(x) = T(x) (x-p)^t + A(x) S(x) \\
+    P(x) - A(x)S(x) = T(x) (x-p)^t.
+    \end{gather*}
+
+    Skoro $p$ nie jest miejscem zerowym wielomianu $S(x)$, to da się dobrać wielomian $A(x)$ w taki sposób, by lewa strona równania była podzielna przez $(x-p)^t$. Pełne uzasadnienie tego faktu wymaga użycia metod algebry liniowej, co wykracza poza zakres tego materiału. Wtedy $T(x) = \frac{P(x)-A(x)S(x)}{(x-p)^t}$ jest wielomianem i ma stopień mniejszy od $n-t$.
+    
+    Istnienie rozkładu na ułamki proste ułamka $\frac{P(x)}{Q(x)}$ sprowadziliśmy więc do istnienia rozkładu na ułamki proste ułamków $\frac{A(x)}{(x-p)^t}$ oraz $\frac{T(x)}{S(x)}$. Mianowniki tych ułamków mają odpowiednio $1$ i $m$ miejsc zerowych, a zatem istnienie żądanego rozkładu dla tych ułamków wynika z założenia indukcyjnego.
+    \end{proof}
+
+    \begin{lemma}
+    Niech $k$ będzie liczbą naturalną, a $q$ liczbą zespoloną. Ciągiem dla funkcji tworzącej
+    $$
+    f(x) = \frac{1}{(1-qx)^k}
+    $$
+    jest ciąg $(a_n)$ o wyrazie zdefiniowanym jako
+    $$
+    a_n = {n+k-1 \choose k-1} q^n.
+    $$
+    \end{lemma}
+    \begin{proof}
+    Dowód przeprowadzimy indukcyjnie ze względu na $k$.
+
+    Dla $k = 1$ współczynniki ${n+k-1 \choose k-1}$ są stale równe $1$, tak więc $(a_n)$ jest ciągiem geometrycznym o ilorazie $q$, czyli, jak wiemy z rozdziału Wstęp, ciągiem dla funkcji tworzącej $f(x) = \frac{1}{1-qx}$. 
+
+    Niech $m$ będzie dowolną liczbą naturalną. Załóżmy, że teza lematu jest prawdziwa dla $k=m$. Pokażemy, że wówczas jest prawdziwa również dla $k=m+1$.
+
+    Mamy
+    $$
+    f(x) = \frac{1}{(1-qx)^{m+1}} = \frac{1}{(1-qx)^m} \cdot \frac{1}{(1-qx)},
+    $$
+    zatem ciąg dla funkcji tworzącej $f(x)$ będzie splotem Cauchy'ego ciągu dla funkcji $\frac{1}{(1-qx)^m}$ i ciągu dla funkcji $\frac{1}{(1-qx)}$.
+
+    Niech $(b_n)$ będzie ciągiem dla funkcji $\frac{1}{(1-qx)^m}$ i niech $(c_n)$ będzie ciągiem dla funkcji $\frac{1}{(1-qx)}$. Z założenia indukcyjnego wiemy, że $b_n = {n+m-1 \choose m-1} q^n$, a z rozdziału Wstęp wiemy, że $c_n = q^n$. Dla dowolnego $n$ mamy więc
+    \begin{align*}
+        a_n = \sum_{k=0}^n b_kc_{n-k} = \sum_{k=0}^n {k+m-1 \choose m-1} q^k \cdot q^{n-k} = \sum_{k=0}^n {k+m-1 \choose m-1} q^n = q^n \sum_{k=0}^n {k+m-1 \choose m-1}
+    \end{align*}
+
+    Sumę, którą otrzymaliśmy na końcu obliczymy przez wielokrotne stosowanie tożsamości Pascala, czyli ${n \choose k} + {n \choose k+1} = {n+1 \choose k}$ oraz tożsamości ${n \choose k} = {n \choose n-k}$. Mamy więc
+    \begin{align*}
+        \sum_{k=0}^n {k+m-1 \choose m-1} &= \sum_{k=0}^n {k+m-1 \choose k} \\
+        &= \underbrace{{m-1 \choose 0}}_1 + {m \choose 1} + {m+1 \choose 2} + {m+2 \choose 3} + \cdots + {n+m-1 \choose n} \\
+        &= \underbrace{{m \choose 0}}_1 + {m \choose 1} + {m+1 \choose 2} + {m+2 \choose 3} + \cdots + {n+m-1 \choose n} \\
+        &= \left({m \choose 0} + {m \choose 1}\right) + {m+1 \choose 2} + {m+2 \choose 3} + \cdots + {n+m-1 \choose n} \\
+        &= \left({m+1 \choose 1} + {m+1 \choose 2}\right) + {m+2 \choose 3} + \cdots + {n+m-1 \choose n} \\
+        &= \left({m+1 \choose 3} + {m+2 \choose 3}\right) + \cdots + {n+m-1 \choose n} \\
+        &\vdots \\
+        &= {n+m \choose n} = {n+m \choose m} = {n+(m+1)-1 \choose (m+1)-1}. \\
+    \end{align*}
+    Otrzymaliśmy więc oczekiwaną definicję wyrazu ciągu $(a_n)$.
+    \end{proof}
+
+    Znając powyższe lematy możemy przystąpić do podania uniwersalnego sposobu rozwiązywania rekurencji liniowych, czyli rozwiązania poniższego, dość ogólnego, zadania.
+    \begin{problem}
+    Niech $k$ będzie liczbą naturalną, a $c_0, c_1, \ldots, c_{k-1}$ oraz $\alpha_1, \alpha_2, \ldots, \alpha_k$ danymi liczbami rzeczywistymi. Wyznacz wzór jawny ciągu nieskończonego $(a_n)$ zdefiniowanego jako
+    $$
+    a_n = \begin{cases} c_n, &\text{gdy $n < k$;} \\ \alpha_1 a_{n-1} + \alpha_2 a_{n-2} + \cdots + \alpha_k a_{n-k}, &\text{gdy $n \geq k$.} \end{cases}
+    $$
+    \end{problem}
+    
+
+    Niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$ z treści powyższego zadania. Wówczas mamy
+    \begin{align*}
+        f(x) &= \sum_{n=0}^\infty a_nx^n \\
+        &= \sum_{n=0}^{k-1} a_nx^n + \sum_{n=0}^\infty a_{n+k}x^{n+k} \\
+        &= \sum_{n=0}^{k-1} a_nx^n + \sum_{n=0}^\infty \left(\alpha_1 a_{n+k-1} + \alpha_2 a_{n+k-2} + \cdots + \alpha_k a_{n}\right)x^{n+k} \\
+        &= \sum_{n=0}^{k-1} a_nx^n + \sum_{\ell=1}^k \sum_{n=0}^\infty \alpha_\ell a_{n+k-\ell} x^{n+k} \\
+        &= \sum_{n=0}^{k-1} a_nx^n + \sum_{\ell=1}^k \alpha_\ell x^\ell \sum_{n=0}^\infty a_{n+k-\ell} x^{n+k-\ell} \\
+        &= \sum_{n=0}^{k-1} a_nx^n + \sum_{\ell=1}^k \alpha_\ell x^\ell \sum_{n=k-\ell}^\infty a_n x^n \\
+    \end{align*}
+    Niech $P_\ell(x) = \sum_{n=0}^{\ell-1} a_nx^n$. Wielomiany $P_1(x), P_2(x), \ldots, P_k(x)$ są nam znane, bo wynikają wprost z pierwszych wyrazów ciągu $(a_n)$. Z ich pomocą możemy zapisać wzór na $f(x)$ zgrabniej:
+    \begin{align*}
+        f(x) &= \sum_{n=0}^{k-1} a_nx^n + \sum_{\ell=1}^k \alpha_\ell x^\ell \sum_{n=k-\ell}^\infty a_n x^n \\
+        &= P_k(x) + \sum_{\ell=1}^k \alpha_\ell x^\ell (f(x) - P_{k-\ell}(x)) \\
+    \end{align*}
+    a zatem
+    $$
+    f(x) = P_k(x) - \sum_{\ell=1}^k \alpha_\ell x^\ell P_{k-\ell}(x) + f(x) \sum_{\ell=1}^k \alpha_\ell x^\ell,
+    $$
+    czyli ostatecznie
+    $$
+    f(x) = \frac{P_k(x) - \sum_{\ell=1}^k \alpha_\ell x^\ell P_{k-\ell}(x)}{1-\sum_{\ell=1}^k \alpha_\ell x^\ell}.
+    $$
+    Teraz wystarczy skrócić otrzymany ułamek i wyznaczyć wszystkie pierwiastki mianownika. Niech $p_1, p_2, \ldots, p_\ell$ będą wszystkimi (również zespolonymi) pierwiastkami mianownika w nieskracalnej postaci powyższego ułamka i niech $m_1, m_2, \ldots, m_\ell$ będą ich odpowiednimi krotnościami. Wtedy na mocy lematu \ref{lemma:partialfracs} możemy zapisać $f(x)$ jako sumę ułamków prostych o mianownikach $(x-p_1), (x-p_1)^2, \ldots, (x-p_1)^{m_1}, (x-p_2), (x-p_2)^2, \ldots, (x-p_\ell)^{m_\ell}$. Oznacza to, że wzór jawny ciągu $(a_n)$ będzie postaci
+    $$
+    \sum_{i=1}^\ell \sum_{j=1}^{n_i} A_{i,j} n^{j-1} p_i^n
+    $$
+    dla odpowiednio dobranych stałych $A_{i, j}$. Te stałe zwykle dobieramy wstawiając do powyższego wzoru takie wartości $n$, dla których znamy $n$-ty wyraz ciągu $(a_n)$.
+
+    Nieznaczna modyfikacja powyższej metody pozwala nam rozwiązywać jeszcze szerszą klasę rekurencji, co obrazuje poniższy przykład.
+    \begin{example}
+        Niech $(a_n)$ będzie ciągiem zdefiniowanym jako $a_0 = 0$, $a_1 = 0$, $a_{n+2} = 2a_{n+1} - a_n + 2^n + n+1$. Niech $f(x)$ będzie jego funkcją tworzącą. Mamy wówczas
+        \begin{align*}
+        f(x) &= \sum_{n=0}^\infty a_nx^n \\
+        &= \sum_{n=2}^\infty a_nx^n \\
+        &= \sum_{n=0}^\infty a_{n+2}x^{n+2} \\
+        &= \sum_{n=0}^\infty (2a_{n+1} - a_n + 2^n + n+1)x^{n+2} \\
+        &= x^2\sum_{n=0}^\infty 2^nx^n + x^2\sum_{n=0}^\infty (n+1)x^n + 2x\sum_{n=0}^\infty a_nx^n - x^2\sum_{n=0}^\infty a_nx^n \\
+        &= \frac{x^2}{1-2x} + \frac{x^2}{(1-x)^2} + (2x-x^2)f(x),
+    \end{align*}
+    czyli $f(x) = \frac{\frac{x^2}{1-2x} + \frac{x^2}{(1-x)^2}}{1-2x+x^2} = \frac{x^2(1-x)^2 + x^2(1-2x)}{(1-x)^4(1-2x)}$. Po wykonaniu rozkładu na ułamki proste otrzymujemy
+    $$
+    f(x) = \frac{1}{1-2x} - \frac{2}{(1-x)^3} + \frac{1}{(1-x)^4}.
+    $$
+    Znamy ciągi odpowiadające funkcjom tworzącym będącym w postaci ułamków prostych, a zatem możemy zapisać wzór jawny na wyraz ciągu $(a_n)$ jako
+    \begin{gather*}
+    a_n = 2^n - 2{n+2 \choose 3} + {n+3 \choose 4} = 2^n - \frac{(n+2)(n+1)n}{3} + \frac{(n+3)(n+2)(n+1)n}{24} = \\
+    = 2^n + \frac{1}{24} (n^4 - 2 n^3 - 13 n^2 - 10n).
+    \end{gather*}
+    \end{example}
+    
+\subsection{Wydawanie reszty}
+
+    Rozważmy następujące zadanie.
+    \begin{problem} \label{problem:monety1}
+        Na ile sposobów można wydać kwotę $n\,\text{zł}$ monetami o nominałach $1\,\text{zł}$, $2\,\text{zł}$ i $5\,\text{zł}$?
+    \end{problem}
+
+    Najpierw skonstruujmy konkretny model matematyczny, w którym można rozwiązać to zadanie.
+
+    Każdy sposób wydania kwoty $n\,\text{zł}$ monetami o nominałach $1\,\text{zł}$, $2\,\text{zł}$ i $5\,\text{zł}$ możemy zapisać jako trójkę nieujemnych liczb całkowitych $(a, b, c)$, która oznacza, że w danym sposobie używamy $a$ monet $1\,\text{zł}$, $b$ monet $2\,\text{zł}$ i $c$ monet $5\,\text{zł}$. Mając taki model, nasze zadanie możemy zapisać nieco innym językiem.
+
+    \begin{problem} \label{problem:monety2}
+        Ile jest trójek nieujemnych liczb całkowitych $(a, b, c)$ takich, że
+        $$
+        a + 2b + 5c = n\ ?
+        $$
+    \end{problem}
+
+    Pozostawmy na chwilę to zadanie i rozważmy funkcję tworzącą o wzorze
+    $$
+    f(x) = (1+x+x^2+x^3+x^4+\cdots)(1+x^2+x^4+x^6+x^8+\cdots)(1+x^{5}+x^{10}+x^{15}+x^{20}+\cdots).
+    $$
+    W tym iloczynie każde wystąpienie $x^n$ otrzymujemy następująco: wybieramy wyraz z pierwszego nawiasu (oznaczmy go jako $x^a$), wybieramy wyraz z drugiego nawiasu (oznaczmy go jako $x^{2b}$) i wybieramy wyraz z trzeciego nawiasu (oznaczmy go jako $x^{5c}$), a następnie wyrazy te mnożymy i uzyskujemy $x^{a+2b+5c}$. Oznacza to, że współczynnik przy $x^n$ w $f(x)$ jest równy liczbie sposobów, na które możemy wybrać trzy liczby naturalne $a$, $b$ i $c$ tak, by $x^{a+2b+5c} = x^n$, czyli $a+2b+5c = n$. To jest dokładnie to samo zadanie, co zadanie \ref{problem:monety2}, a więc też to samo co zadanie \ref{problem:monety1}!
+
+    Sprowadziliśmy więc zadanie o wydawaniu kwoty monetami o podanych nominałach do wyznaczenia wartości współczynnika stojącego przy $x^n$ w funkcji tworzącej. Skoro zadania są te same, to wyniki też muszą być takie same, tak więc wyznaczmy szukany współczynnik w $f(x)$. Mamy
+    \begin{align*}
+        f(x) &= (1+x+x^2+x^3+\cdots)(1+x^2+x^4+x^6+\cdots)(1+x^{5}+x^{10}+x^{15}+\cdots) \\
+        f(x) &= \frac{1}{1-x} \cdot \frac{1}{1-x^2} \cdot \frac{1}{1-x^5}.
+    \end{align*}
+
+    Spróbujmy zapisać $f(x)$ w następującej postaci, która nie jest pełnoprawnym rozkładem na ułamki proste, ale znalezienie rozkładu w tej postaci również przybliży nas do wyniku. Szukamy wielomianów $A(x)$, $B(x)$ i $C(x)$ takich, że
+    $$
+    f(x) = \frac{1}{1-x} \cdot \frac{1}{1-x^2} \cdot \frac{1}{1-x^5} = \frac{A(x)}{(1-x)^3} + \frac{B(x)}{1-x^2} + \frac{C(x)}{1-x^5}.
+    $$
+
+    Po odpowiednich rachunkach możemy uzyskać następujący rozkład:
+    $$
+    f(x) = -\frac{1}{40}\cdot\frac{13 x^2 - 36 x + 27}{(1-x)^3} + \frac{1}{8} \cdot \frac{1-x}{1-x^2} + \frac{1}{5} \cdot \frac{-x^4-x^3+x^2+1}{1-x^5}.
+    $$
+
+    Znamy wszystkie ciągi odpowiadające powyższym składnikom, co, po pewnej wytrwałości rachunkowej, może dać nam wzór jawny na liczbę sposobów na jakie można wydać kwotę $n\,\text{zł}$ monetami o nominałach $1\,\text{zł}$, $2\,\text{zł}$ i $5\,\text{zł}$.
+
+\newpage
+\section{Zadania}
+
+\begin{problem} \label{problem:k2newton}
+Zapisz zwarty wzór na sumę
+$$
+\sum_{k=0}^n k^2{n \choose k}.
+$$
+\end{problem}
+\begin{problem} \label{problem:newtonprod}
+Zapisz zwarty wzór na sumę
+$$
+\sum_{k=0}^n {n \choose k}^2.
+$$
+\end{problem}
+\begin{problem} \label{problem:receq1}
+Podaj zwarty wzór określający ciąg $(a_n)$ dla $$a_0 = a_1 = a_2 = 0,\quad a_{n+3} = 5a_{n+2} - 3a_{n+1} - a_n + 3^n.$$
+\end{problem}
+\begin{problem} \label{problem:receq2}
+Podaj zwarty wzór określający ciąg $(b_n)$ dla $$b_0 = 0,\quad b_1 = 1,\quad b_{n+2} = 2b_{n+1}-b_n + 4^n.$$
+\end{problem}
+\begin{problem} \label{problem:rectanglefilling}
+Na ile sposobów można pokryć całkowicie prostokąt rozmiaru $2 \times n$ kostkami domina o wymiarach $2 \times 1$ oraz $2 \times 2$? Kostki można dowolnie obracać.  
+\end{problem}
+\begin{problem} \label{problem:abcd}
+Na ile sposobów można rozdać 2024 jabłka pomiędzy Adama, Bartka, Czarka i Darka tak, aby Adam dostał parzystą liczbę jabłek, Bartek dostał liczbę jabłek podzielną przez 6, Czarek dostał co najwyżej pięć jabłek, a Darek dostał co najwyżej jedno jabłko?    
+\end{problem}
+\begin{problem} \label{problem:partitions}
+Udowodnij, że dla dowolnego naturalnego $n$ liczba podziałów $n$ na składniki nieparzyste jest równa liczbie podziałów na składniki parami różne.
+\end{problem}
+\begin{problem} \label{problem:logfun}
+Wskaż zwarty wzór funkcji tworzącej dla ciągu $(a_n)$ zdefiniowanego jako
+$$
+a_n = \begin{cases} \frac{1}{n}, &\text{dla $n > 0$;} \\ 0, &\text{dla $n = 0$.} \end{cases}
+$$
+\end{problem}
+\begin{problem} \label{problem:ternary}
+Udowodnij, że każda liczba naturalna ma jednoznaczne przedstawienie w postaci sumy $a_k3^k$ dla $k$ przebiegających wszystkie nieujemne liczby całkowite i $a_k \in \{-1, 0, +1\}$.
+\end{problem}
+\begin{problem} \label{problem:poly2}
+Wielomian o współczynnikach należących do zbioru $\{0, 1, 2, 3\}$ nazwiemy wielomianem \emph{4-regularnym}. 
+
+Niech $n$ będzie liczbą naturalną. Ile jest wielomianów 4-regularnych $P(x)$, dla których $P(2) = n$?
+\end{problem}
+\begin{problem} \label{problem:cauchyidp}
+Znajdź wszystkie ciągi nieskończone $(a_n)$, dla których $a_0 = 1$ oraz
+$$
+\sum_{k=0}^n a_ka_{n-k} = 1
+$$
+dla wszystkich liczb naturalnych $n$. Podaj wzór lub wzory jawne.
+\end{problem}
+\begin{problem} \label{problem:subsetprod}
+Niech dla $A$ będącego zbiorem liczb rzeczywistych, $P(A)$ oznacza iloczyn wszystkich elementów $A$. Niech $S = \{1, \frac12, \frac13, \ldots, \frac{1}{n}\}$. Oblicz sumę $P(A)$ dla $A$ przebiegającego wszystkie niepuste podzbiory $S$.
+\end{problem}
+\begin{problem} \label{problem:rs}
+Niech dla $S$ będącego zbiorem nieujemnych liczb całkowitych, $r_S(n)$ oznacza liczbę takich uporządkowanych par $(s_1, s_2)$, że $s_1, s_2 \in S$, $s_1 \neq s_2$ oraz $s_1+s_2 = n$. Czy można podzielić zbiór nieujemnych liczb całkowitych na takie dwa zbiory $A$ i $B$, że dla każdej nieujemnej liczby całkowitej $n$ zachodzi równość $r_A(n) = r_B(n)$?
+\end{problem}
+\begin{problem} \label{problem:qs}
+Niech dla $S$ będącego zbiorem nieujemnych liczb całkowitych, 
+$q_S(n)$ oznacza liczbę takich uporządkowanych par $(s_1, s_2)$, że $s_1, s_2 \in S$ i $s_1+s_2 = n$. Wyznacz wszystkie podzbiory liczb naturalnych $A$ takie, że dla każdej liczby naturalnej $n$ różnej od $1$ zachodzą warunki
+$$
+q_A(n) \leq 1 \quad\text{oraz}\quad q_A(n) = 1 \iff n \in A.
+$$
+\end{problem}
+\begin{problem} \label{problem:partitions23}
+Niech $n$ będzie liczbą naturalną. Udowodnij, że liczba podziałów $n$ na dodatnie liczby całkowite, w których każdy składnik występuje co najmniej dwa razy jest równa liczbie podziałów $n$ na dodatnie składniki podzielne przez $2$ lub $3$.
+\end{problem}
+\begin{problem} \label{problem:klm}
+Niech $S= \{(k, \ell, m): k, \ell, m \in \mathbb{Z}_{\geq 0}, k+\ell+m=2024\}$. Oblicz
+$$
+    \sum_{(k, \ell, m) \in S} k\ell m.
+$$
+\end{problem}
+
+\chapter{Wykładnicze funkcje tworzące}
+
+W tym rozdziale opiszemy siostrzane do funkcji tworzących opisywanych dotychczas, wykładnicze funkcje tworzące, których mnożenie będzie wyrażało nieco inną operację, niż w przypadku standardowych funkcji tworzących.
+
+\section{Podstawy teorii}
+
+\begin{definition}
+    \emph{Wykładnicza funkcja tworząca} ciągu $(a_n)$ to wyrażenie postaci
+    $$
+    f(x) = a_0 + a_1\frac{x}{1!} + a_2\frac{x^2}{2!} + a_3\frac{x^3}{3!} + \cdots
+    $$
+\end{definition}
+
+Łatwo sprawdzić, że definicje równości, sumy i iloczynu z liczbą rzeczywistą funkcji tworzących pozostają takie same dla wykładniczych funkcji tworzących. Zmienia się jednak definicja iloczynu dwóch wykładniczych funkcji tworzących.
+
+\begin{definition} \label{def:binomialconv}
+    \emph{Splot dwumianowy} dwóch ciągów nieskończonych $(a_n)$ i $(b_n)$ to ciąg $(c_n)$ o wyrazie zdefiniowanym jako
+    $$
+    c_n = \sum_{k=0}^n {n \choose k} a_k b_{n-k}.
+    $$
+    Splot dwumianowy ciągów $(a_n)$ i $(b_n)$ oznaczamy w tym materiale jako $(a_n) *^B (b_n)$.
+\end{definition}
+
+\begin{definition}
+    \emph{Iloczyn} wykładniczych funkcji tworzących $f(x)$ (ciągu $(a_n)$) i $g(x)$ (ciągu $(b_n)$) to wykładnicza funkcja tworząca $(fg)(x)$ ciągu $(c_n)$ zdefiniowanego jako splot dwumianowy ciągów $(a_n)$ i $(b_n)$.
+\end{definition}
+
+Pokażemy, że definicja iloczynu wykładniczych funkcji tworzących zgadza się z algebraicznymi własnościami tychże funkcji. 
+
+Niech $f(x)$ i $g(x)$ będą wykładniczymi funkcjami tworzącymi dla ciągów odpowiednio $(a_n)$ i $(b_n)$. Mamy
+\begin{align*}
+    f(x)g(x) &= \left(a_0 + a_1\frac{x}{1!} + a_2\frac{x^2}{2!} + a_3\frac{x^3}{3!} + \cdots\right)\left(b_0 + b_1\frac{x}{1!} + b_2\frac{x^2}{2!} + b_3\frac{x^3}{3!} + \cdots\right)
+\end{align*}
+
+Współczynnik przy $x^n$ w powyższym iloczynie wyznaczymy przechodząc po wszystkich możliwych wyborach $a_k\frac{x^k}{k!}$ z pierwszego nawiasu i $b_\ell \frac{x^\ell}{\ell!}$ z drugiego nawiasu, tak by wykładnik przy $x$ w ich iloczynie był równy $n$. Wobec tego współczynnik przy $x^n$ wyraża się wzorem
+$$
+\sum_{\substack{(k, l) \in \mathbb{N}^2 \\ k + \ell = n}} \frac{a_k}{k!} \cdot \frac{b_\ell}{\ell!} = \sum_{k=0}^n \frac{1}{k!(n-k)!} a_k b_{n-k} = \frac{1}{n!} \sum_{k=0}^n \frac{n!}{k!(n-k)!} a_k b_{n-k} = \frac{1}{n!} \sum_{k=0}^n {n \choose k} a_k b_{n-k}.
+$$
+
+Pamiętajmy, że w wykładniczych funkcjach tworzących współczynnik przy $x^n$ nie jest już $n$-tym wyrazem reprezentowanego ciągu, lecz $n$-tym wyrazem podzielonym przez $n!$. Wobec tego z powyższego rachunku wynika, że ciąg odpowiadający iloczynowi dwóch wykładniczych funkcji tworzących (dla $(a_n)$ i $(b_n)$) ma wyraz o wzorze
+$$
+c_n = \sum_{k=0}^n {n \choose k} a_k b_{n-k},
+$$
+co jest zgodne z definicją \ref{def:binomialconv}.
+
+Wyznaczmy wykładnicze funkcje tworzące odpowiadające elementarnym ciągom. 
+
+Zacznijmy od definicji podstawowej wykładniczej funkcji tworzącej.
+
+\begin{definition} \label{def:exp}
+    Niech $(a_n)$ będzie ciągiem stale równym $1$. Wykładniczą funkcję tworzącą tego ciągu będziemy oznaczać jako
+    $$
+    \exp(x) = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots.
+    $$
+\end{definition}
+
+\begin{remark} \label{remark:exp}
+    Funkcja $\exp(x)$ ma kanoniczną własność funkcji wykładniczej, czyli $\exp(x+y) = \exp(x) \cdot \exp(y)$.
+\end{remark}
+\begin{proof}
+    \begin{align*}
+    \exp(x+y) &= \sum_{n=0}^\infty \frac{1}{n!} (x+y)^n \\
+    &= \sum_{n=0}^\infty \frac{1}{n!} \sum_{k=0}^n {n \choose k} x^k y^{n-k} \\
+    &= \sum_{n=0}^\infty \sum_{k=0}^n \frac{1}{k!(n-k)!} x^k y^{n-k} \\
+    &= \sum_{n=0}^\infty \sum_{k=0}^n \frac{x^k}{k!} \cdot \frac{y^{n-k}}{(n-k)!} \\
+    &= \sum_{k=0}^\infty \sum_{\ell=0}^\infty \frac{x^k}{k!} \cdot \frac{y^\ell}{\ell!} \\
+    &= \sum_{k=0}^\infty \frac{x^k}{k!} \sum_{\ell=0}^\infty \frac{y^\ell}{\ell!} \\
+    &= \exp(x) \cdot \exp(y).
+    \end{align*}
+\end{proof}
+
+Okazuje się, że sama własność z obserwacji \ref{remark:exp} nie wystarcza do stwierdzenia, że dana funkcja jest funkcją wykładniczą. Wystarczy jednak zauważyć, że tak zdefiniowana funkcja $\exp(x)$ jest ciągła, co w połączeniu z obserwacją wystarcza do udowodnienia, że $\exp(x)$ jest funkcją wykładniczą. Niech $e$ będzie więc taką liczbą rzeczywistą, że $\exp(x) = e^x$.
+
+\begin{remark}
+    Wykładnicza funkcja tworząca odpowiadająca ciągowi geometrycznemu $(1, q, q^2, \ldots)$ to $e^{qx}$.
+\end{remark}
+\begin{proof}
+    $$
+    e^{qx} = \sum_{n=0}^\infty \frac{(qx)^n}{n!} = \sum_{n=0}^\infty q^n \frac{x^n}{n!}.
+    $$
+\end{proof}
+
+\begin{remark}
+    Wykładnicza funkcja tworząca odpowiadająca ciągowi arytmetycznemu $(0, r, 2r, \ldots)$ to $rxe^x$.
+\end{remark}
+\begin{proof}
+    $$
+        rxe^x = rx\sum_{n=0}^\infty \frac{x^n}{n!} = \sum_{n=0}^\infty r\frac{x^{n+1}}{n!} = \sum_{n=0}^\infty r(n+1)\frac{x^{n+1}}{(n+1)!} = \sum_{n=1}^\infty rn\frac{x^n}{n!} = \sum_{n=0}^\infty rn\frac{x^n}{n!}.
+    $$
+\end{proof}
+
+Sprawdźmy jakim operacjom na ciągach odpowiadają podstawowe operacje na funkcjach tworzących.
+
+\begin{definition}
+    \emph{Przesunięcie w prawo} wykładniczej funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $xf(x)$ ciągu $(b_n)$ zdefiniowanego jako $b_0 = 0$ i $b_n = na_{n-1}$ dla wszystkich $n \in \{1, 2, \ldots\}$.
+\end{definition}
+
+Krótko uzasadnijmy:
+$$
+xf(x) = x\sum_{n=0}^\infty a_n\frac{x^n}{n!} = \sum_{n=0}^\infty a_n\frac{x^{n+1}}{n!} = \sum_{n=0}^\infty (n+1)a_n\frac{x^{n+1}}{(n+1)!} = \sum_{n=1}^\infty na_{n-1}\frac{x^n}{n!}.
+$$
+
+\begin{definition}
+    \emph{Przesunięcie w lewo} wykładniczej funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $\frac{f(x)-f(0)}{x}$ ciągu $(b_n)$ zdefiniowanego jako $b_n = (n+1)a_{n+1}$ dla wszystkich $n \in \{0, 1, 2, \ldots\}$.
+\end{definition}
+
+\begin{definition}
+    \emph{Pochodna} wykładniczej funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $f'(x)$ ciągu $(b_n)$ zdefiniowanego jako $b_n = a_{n+1}$.
+\end{definition}
+
+Krótko uzasadnijmy:
+$$
+\left[a_0 + a_1\frac{x}{1!} + a_2\frac{x^2}{2!} + a_3\frac{x^3}{3!} + \cdots\right]' =  a_1 + 2a_2\frac{x}{2!} + 3a_3\frac{x^2}{3!} + \cdots = a_1 + a_2\frac{x}{1!} + a_3\frac{x^2}{2!} + \cdots.
+$$
+
+\begin{definition}
+    \emph{Całka} wykładniczej funkcji tworzącej $f(x)$ (ciągu $(a_n)$) to funkcja tworząca $\int f(x)$ ciągu $(b_n)$ zdefiniowanego jako $b_0 = 0$ i $b_n = a_{n-1}$.
+\end{definition}
+
+\section{Zastosowania}
+
+\subsection{Słowa z ograniczeniami na liczność poszczególnych liter}
+
+Rozwiążmy następujące zadanie.
+
+\begin{problem}
+    Słowo złożone z liter $a$, $b$ i $c$, w którym:
+    \begin{itemize}
+        \item litera $a$ występuje nieparzyście wiele razy;
+        \item litera $b$ występuje parzyście wiele razy;
+        \item litera $c$ występuje dowolną liczbę razy;
+    \end{itemize}
+    nazwiemy słowem \emph{ładnym}. Wyznacz liczbę słów ładnych o długości $N$.
+\end{problem}
+\begin{solution}
+    Wyznaczmy najpierw żądaną liczbę słów, ale bez ani jednej litery $c$. 
+    
+    Liczba różnych słów o dokładnie $k$ literach $a$ i $\ell$ literach $b$ to
+    $$
+    {k+\ell \choose k}.
+    $$
+
+    Niech $(a_n)$ będzie ciągiem zerojedynkowym, w którym
+    $$
+    a_n = \begin{cases} 1, &\text{gdy definicja ładnego słowa dopuszcza w nim dokładnie $n$ liter $a$;} \\ 0, &\text{w przeciwnym przypadku.} \end{cases}
+    $$
+    Analogicznie zdefiniujmy $(b_n)$. Wtedy liczba słów ładnych długości $n$, ale bez litery $c$ jest równa
+    $$
+    \sum_{k=0}^n {n \choose k} a_kb_{n-k}.
+    $$
+    By przekonać się o poprawności tego zbioru wystarczy zauważyć, że $a_kb_{n-k} = 1$ wtedy i tylko wtedy, kiedy definicja ładnego słowa dopuszcza w nim dokładnie $k$ liter $a$ i $n-k$ liter $b$, a czynnik ${n \choose k}$ pochodzi z drugiego akapitu rozwiązania. W szczególności zauważmy, że $\sum_{k=0}^n {n \choose k} a_kb_{n-k}$ to $n$-ty wyraz splotu dwumianowego ciągów $(a_n)$ i $(b_n)$.
+
+    Powyższą obserwację można uogólnić na trzy i więcej liter. W ogólności ciąg oznaczający liczbę słów o poprawnych licznościach poszczególnych liter będzie splotem dwumianowym ciągów zerojedynkowych zdefiniowanych powyżej.
+
+    Teraz rozwiązanie naszego zadania powinno być już proste. Niech $(c_n) = (1, 1, \ldots)$, niech $(d_n)$ będzie takim ciągiem, że $d_n$ oznacza liczbę słów ładnych długości $n$. Mamy
+    $$
+    (d_n) = (a_n) *^B (b_n) *^B (c_n),
+    $$
+    tak więc jeśli $f(x)$ jest wykładniczą funkcją tworzącą ciągu $(d_n)$, to zachodzi równość
+    $$
+    f(x) = \underbrace{\left(\frac{e^x - e^{-x}}{2}\right)}_{\text{WFT dla $(a_n)$}}\underbrace{\left(\frac{e^x + e^{-x}}{2}\right)}_{\text{WFT dla $(b_n)$}} \underbrace{e^x}_{\text{WFT dla $(c_n)$}} = \frac{e^{3x}-e^{-x}}{4}.  
+    $$
+    Wobec tego $d_n = \frac{3^n - (-1)^n}{4}$ i to jest ostateczna odpowiedź do tego zadania.
+\end{solution}
+\subsection{Liczby Bella}
+
+Niech $B_n$ oznacza liczbę podziałów zbioru $n$-elementowego na niepuste podzbiory. W tej podsekcji chcielibyśmy wyznaczyć wykładniczą funkcję tworzącą ciągu $(B_n)$ i znaleźć wzór jawny na $B_n$.
+
+Na początek zapiszmy jakąś rekurencję na $B_n$, tak by wykorzystać ją w znajdowaniu wykładniczej funkcji tworzącej.
+
+Rozważmy dowolny podział zbioru $(n+1)$-elementowego $\{1, 2, \ldots, n+1\}$ na niepuste podzbiory. Takich podziałów jest $B_{n+1}$, co przyda nam się później. Niech $J$ będzie podzbiorem z podziału, do którego trafił element $1$. Wtedy zbiór $\{1, 2, \ldots, n+1\} \setminus J$, który ma $n+1-|J|$ elementów jest podzielony na niepuste podzbiory niezależnie od tego co się działo w $J$.
+
+Każdy podział zbioru $(n+1)$-elementowego $\{1, 2, \ldots, n+1\}$ na niepuste podzbiory jest wyznaczony jednoznacznie przez wskazanie podzbioru $J \subseteq \{1, 2, \ldots, n+1\}$ zawierającego element $1$ i wskazanie podziału podzbioru $\{1, 2, \ldots, n+1\} \setminus J$. Wobec tego możemy zapisać zależność
+$$
+B_{n+1} = \sum_{\{1\} \subseteq J \subseteq \{1, 2, \ldots, n+1\}} B_{n+1-|J|}.
+$$
+Zauważmy, że $B_{n+1-|J|}$ zależy wyłącznie od wielkości zbioru $J$, a nie od jego konkretnych elementów, więc możemy przepisać powyższą sumę, ale sumując po wielkościach zbioru $J$, a nie po konkretnych zbiorach. Zauważmy jeszcze, że zbiór $J$ możemy wybrać na ${n \choose |J|-1}$ sposobów. Mamy więc
+\begin{align*}
+B_{n+1} &= \sum_{k=1}^{n+1} {n \choose k-1} B_{n+1-k} \\
+&= \sum_{k=0}^{n} {n \choose k} B_{n-k}.
+\end{align*}
+
+Mamy już nietrywialną zależność rekurencyjną na $(B_n)$. Spróbujmy ją wykorzystać, by wyznaczyć wykładniczą funkcję tworzącą $f(x)$ dla $(B_n)$.
+
+\begin{align*}
+    f(x) &= \sum_{n=0}^\infty B_n \frac{x^n}{n!} \\
+     &= 1 + \sum_{n=1}^\infty B_n \frac{x^n}{n!} \\
+     &= 1 + \sum_{n=0}^\infty B_{n+1} \frac{x^{n+1}}{(n+1)!}
+\end{align*}
+Przypomnijmy, że pochodna wykładniczej funkcji tworzącej jest funkcją tworzącą dla ciągu przesuniętego w lewo względem oryginalnego. Mamy więc
+\begin{align*}
+    f'(x) &= \sum_{n=0}^\infty B_{n+1} \frac{x^n}{n!} \\
+    &= \sum_{n=0}^\infty \sum_{k=0}^{n} {n \choose k} B_{n-k} \cdot \frac{x^n}{n!} \\
+    &= \sum_{n=0}^\infty \sum_{k=0}^{n} \frac{1}{k!(n-k)!} B_{n-k} \cdot x^n \\
+    &= \sum_{n=0}^\infty \sum_{k=0}^{n} \left(B_{n-k} \cdot \frac{x^{n-k}}{(n-k)!}\right) \left(\frac{x^k}{k!}\right) \\
+    &= \left( \sum_{n=0}^\infty B_{n} \cdot \frac{x^{n}}{(n)!}\right) \left(\sum_{k=0}^{n} \frac{x^k}{k!}\right) \\
+    &= f(x) \cdot e^x. 
+\end{align*}
+Wobec tego otrzymaliśmy równanie $f'(x) = f(x) \cdot e^x$. Takie równania nazywają się \emph{równaniami różniczkowymi} i zwykle wymagają do rozwiązania specjalnych technik. My jednak zauważmy, że
+$$
+[\log f(x)]' = \frac{f'(x)}{f(x)} = e^x,
+$$
+zatem 
+$$
+f(x) = e^{e^x + C}
+$$
+dla pewnej rzeczywistej stałej $C$. Stałą $C$ można wyznaczyć podstawiając do $f(x)$ argument $x = 0$ -- wówczas okaże się, że $C = -1$ i ostatecznie
+$$
+f(x) = e^{e^x - 1}.
+$$
+
+Spróbujmy znaleźć wzór jawny na $B_n$. Mamy
+\begin{align*}
+    \sum_{n=0}^\infty B_n \frac{x^n}{n!} = f(x) = e^{e^x-1} &= \frac{1}{e} \sum_{n=0}^\infty \frac{(e^x)^n}{n!} \\
+    &= \frac{1}{e} \sum_{n=0}^\infty \frac{e^{nx}}{n!} \\
+    &= \frac{1}{e} \sum_{n=0}^\infty \frac{\sum_{k=0}^\infty \frac{(nx)^k}{k!}}{n!} \\
+    &= \frac{1}{e} \sum_{n=0}^\infty \sum_{k=0}^\infty \frac{n^k}{n!} \frac{x^k}{k!} \\
+    &= \frac{1}{e} \sum_{k=0}^\infty \frac{x^k}{k!} \left(\sum_{n=0}^\infty  \frac{n^k}{n!}\right)  \\
+\end{align*}
+
+Nie otrzymaliśmy co prawda wzoru jawnego, ale w zamian za to mamy nietrywialną zależność
+$$
+B_n = \frac{1}{e} \sum_{m=0}^\infty  \frac{m^n}{m!}.
+$$
+
+\newpage
+\section{Zadania}
+
+%https://ii.uni.wroc.pl/~gst/Komb/k4.pdf
+\begin{problem} \label{problem:seqpart}
+    Podział zbioru $\{1, \ldots, n\}$ na ciągi to zbiór ciągów, takich że każda z liczb $1, \ldots  n$ występuje w nim dokładnie raz. Przykładowo, wszystkie możliwe podziały $\{1, 2\}$ to $\{(1), (2)\}$, $\{(1, 2)\}$ oraz $\{(2, 1)\}$. Niech $a_n$ oznacza liczbę różnych podziałów zbioru $\{1, \ldots, n\}$ na ciągi, przyjmijmy, że $a_0 = 1$. Udowodnij, że
+    $$
+    a_{n+1} = \sum_{k=0}^n {n \choose k} (k+1)! a_{n-k}
+    $$
+    i następnie oblicz wykładniczą funkcję tworzącą ciągu $a_n$.
+\end{problem}
+
+\begin{problem} \label{problem:derangements}
+    \emph{Nieporządek} wielkości $n$ to permutacja długości $n$, w której żaden element nie zostaje na swojej oryginalnej pozycji. Niech $d_n$ oznacza liczbę nieporządków wielkości $n$. Udowodnij, że
+    $$
+    d_n = n!\left(\frac{1}{0!} - \frac{1}{1!} + \frac{1}{2!} - \cdots + \frac{(-1)^n}{n!}\right).
+    $$
+\end{problem}
+
+\begin{problem} \label{problem:permunitysqroot}
+    Wyznacz liczbę permutacji długości $n$, które po złożeniu z samą sobą dają permutację identycznościową.
+\end{problem}
+
+\begin{problem} \label{problem:avgnocyc}
+    Niech $\sigma$ będzie permutacją i niech $c(\sigma)$ oznacza liczbę cykli w permutacji $\sigma$. Wyznacz sumę $c(\sigma)$ po $\sigma$ przebiegającym przez wszystkie permutacje długości $n$.
+\end{problem}
+
+\begin{problem} \label{problem:expcubed}
+    Niech $X$ będzie podzbiorem liczb naturalnych. Niech $f(X, n)$ oznacza liczbę słów długości $n$ złożonych z liter $a$, $b$, $c$ w taki sposób, że liczność każdej litery w słowie należy do $X$. Czy istnieje taki podzbiór liczb naturalnych $A \subseteq \mathbb{N}$, że
+    $$
+    f(A, n) = \frac{(1-(-1)^n)(3^n-3)}{8}\ ?
+    $$
+\end{problem}
+
+\begin{problem} \label{problem:diffeq}
+    Korzystając z własności wykładniczych funkcji tworzących, znajdź niezerową funkcję spełniającą równanie
+    $$
+    f(x) = 5f'(x) - 6f''(x).
+    $$
+\end{problem}
+
+\chapter{Szeregi Dirichleta}
+
+W tym rozdziale opiszemy obiekt, który również, jak opisywane wcześniej funkcje tworzące i wykładnicze funkcje tworzące, jest opisem nieskończonego ciągu, ale sama analogia jest w nieco innym guście.
+
+Na początek wprowadzimy (lub przypomnimy) oznaczenie: niech $k$ i $\ell$ będą liczbami naturalnymi. Wtedy
+$$
+k \mid \ell
+$$
+(czyt. \emph{$k$ dzieli $\ell$}) oznacza, że liczba $k$ jest dzielnikiem liczby $\ell$.
+
+W tej części tekstu zakładamy, że ciągi zaczynają się od elementu indeksowanego przez $1$, a nie przez $0$, jak w poprzednich rozdziałach.
+
+\section{Podstawy teorii}
+
+\begin{definition}
+    \emph{Szereg Dirichleta} ciągu $(a_n)$ to wyrażenie postaci
+    $$
+    f(s) = \frac{a_1}{1^s} + \frac{a_2}{2^s} + \frac{a_3}{3^s} + \cdots
+    $$
+\end{definition}
+
+Przy takiej definicji również okazuje się, że nie zawsze podstawienie konkretnej liczby za $s$ pozwoli nam uzyskać dobrze zdefiniowaną wartość $f(s)$.
+
+Przyjmujemy, że definicje równości, sumy i iloczynu z liczbą rzeczywistą
+funkcji tworzących pozostają takie same dla funkcji tworzących i ich wykładniczych odpowiedników. Definicja iloczynu dwóch szeregów Dirichleta będzie znacznie różnić się od poznanych już przez nas definicji.
+
+\begin{definition} \label{def:dirichletconv}
+    \emph{Splot Dirichleta} dwóch ciągów nieskończonych $(a_n)$ i $(b_n)$ to ciąg $(c_n)$ o wyrazie zdefiniowanym jako
+    $$
+    c_n = \sum_{d : d \mid n} a_d b_{n/d},
+    $$
+    gdzie $\sum_{d : d \mid n}$ oznacza sumowanie po wszystkich $d$ będących dzielnikami $n$.
+    
+    Splot Dirichleta ciągów $(a_n)$ i $(b_n)$ oznaczamy w tym materiale jako $(a_n) * (b_n)$.
+\end{definition}
+
+\begin{definition}
+    \emph{Iloczyn} szeregów Dirichleta $f(s)$ (ciągu $(a_n)$) i $g(s)$ (ciągu $(b_n)$) to szereg Dirichleta $(fg)(s)$ ciągu $(c_n)$ zdefiniowanego jako splot Dirichleta ciągów $(a_n)$ i $(b_n)$.
+\end{definition}
+
+Pokażemy, że definicja iloczynu szeregów Dirichleta zgadza się z algebraicznymi własnościami tychże. 
+
+Niech $f(s)$ i $g(s)$ będą szeregami Dirichleta dla ciągów odpowiednio $(a_n)$ i $(b_n)$. Mamy
+\begin{align*}
+    f(x)g(x) &= \left(\frac{a_1}{1^s} + \frac{a_2}{2^s} + \frac{a_3}{3^s} + \cdots\right)\left(\frac{b_1}{1^s} + \frac{b_2}{2^s} + \frac{b_3}{3^s} + \cdots\right)
+\end{align*}
+
+Współczynnik przy $n^s$ w powyższym iloczynie wyznaczymy przechodząc po wszystkich możliwych wyborach $\frac{a_d}{d^s}$ z pierwszego nawiasu i $\frac{b_{m}}{m^s}$ z drugiego nawiasu, tak by podstawa potęgi w ich iloczynie była równa $n$. Wobec tego $n$-ty wyraz iloczynu szeregów Dirichleta wyraża się wzorem
+$$
+\sum_{\substack{(d, m) \in \mathbb{N}^2 \\ d \cdot m = n}} \frac{a_d}{d^s} \cdot \frac{b_{m}}{m^s} = \sum_{d : d \mid n} \frac{a_d}{d^s} \cdot \frac{b_{n/d}}{(n/d)^s} = \sum_{d : d \mid n} \frac{a_d b_{n/d}}{n^s}.
+$$
+
+Wyznaczymy teraz szeregi Dirichleta dla elementarnych ciągów. Nie każdy ciąg, który można łatwo wyrazić przez funkcję tworzącą lub wykładniczą funkcję tworzącą będzie równie łatwo wyrazić szeregiem Dirichleta, ale za to niektóre ciągi bardzo łatwo zapisać jako szereg Dirichleta, natomiast trudno jako funkcję tworzącą.
+
+\begin{definition}
+    Niech $(a_n)$ będzie ciągiem stale równym $1$. Szereg Dirichleta tego ciągu będziemy oznaczać jako
+    $$
+    \zeta(s) = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots
+    $$
+    i nazywać \emph{funkcją dzeta Riemanna}.
+\end{definition}
+
+\begin{remark}
+    Szereg Dirichleta odpowiadający ciągowi arytmetycznemu $(r, 2r, \ldots)$ to $r\zeta(s-1)$.
+\end{remark}
+\begin{proof}
+    $$
+    r\zeta(s-1) = r\left(\sum_{n=1}^\infty \frac{1}{n^{s-1}}\right) = \sum_{n=1}^\infty \frac{rn}{n^s}.
+    $$
+\end{proof}
+
+\section{Funkcje arytmetyczne}
+
+Dzięki definicji splotu Dirichleta opisywane w tym rozdziale szeregi Dirichleta są unikatowym narzędziem, za pomocą którego można wygodnie operować na ciągach, których definicje są związane z teorią liczb. Takie ciągi nazywa się \emph{funkcjami artymetycznymi}\footnote{formalnie funkcją arytmetyczną jest każda funkcja o dziedzinie będącej zbiorem liczb naturalnych}. Wprowadźmy kilka funkcji arytmetycznych wraz z ich szeregami Dirichleta.
+
+\begin{definition}
+    $\varepsilon(n)$ oznacza funkcję równą $1$ dla $n=1$ i $0$ dla pozostałych $n$.
+\end{definition}
+Szereg Dirichleta dla funkcji $\varepsilon(n)$ to $1$.
+
+\newcommand{\arithone}{\mathbf{1}}
+\begin{definition}
+    $\arithone(n)$ oznacza funkcję stale równą $1$.
+\end{definition}
+Z poprzedniej sekcji wiemy, że szereg Dirichleta dla funkcji $\arithone(n)$ to $\zeta(s)$.
+
+\begin{definition}
+    $\id(n)$ oznacza funkcję identycznościową.
+\end{definition}
+Z poprzedniej sekcji wiemy, że szereg Dirichleta dla funkcji $\id(n)$ to $\zeta(s-1)$.
+
+\begin{definition}
+    $\tau(n)$ oznacza liczbę dzielników liczby $n$.
+\end{definition}
+\begin{remark}
+    Szereg Dirichleta dla funkcji $\tau(n)$ to $\zeta(s)^2$.
+\end{remark}
+\begin{proof}
+Zauważmy, że $\tau = \arithone * \arithone$, ponieważ
+$$
+\tau(n) = \sum_{d : d \mid n} 1 = \sum_{d : d \mid n} \arithone(d) \cdot \arithone(n/d).
+$$
+Wobec tego szereg Dirichleta dla $\tau(n)$ to kwadrat szeregu Dirichleta dla $\arithone$.
+\end{proof}
+
+\begin{definition}
+    $\sigma(n)$ oznacza sumę dzielników liczby $n$.
+\end{definition}
+\begin{remark}
+    Szereg Dirichleta dla funkcji $\sigma(n)$ to $\zeta(s)\zeta(s-1)$.
+\end{remark}
+\begin{proof}
+Zauważmy, że $\sigma = \id * \arithone$, ponieważ
+$$
+\sigma(n) = \sum_{d : d \mid n} d = \sum_{d : d \mid n} \id(d) \cdot \arithone(n/d).
+$$
+\end{proof}
+
+\begin{definition}
+    $\varphi(n)$ oznacza liczbę liczb względnie pierwszych z $n$ mniejszych od $n$. Ta funkcja nazywana jest również \emph{funkcją Eulera}.
+\end{definition}
+\begin{remark}
+    Szereg Dirichleta dla funkcji $\varphi(n)$ to $\frac{\zeta(s-1)}{\zeta(s)}$.
+\end{remark}
+\begin{proof}
+Zauważmy, że dla dowolnej funkcji \emph{multiplikatywnej} $f(n)$ (czyli takiej, że dla dowolnych względnie pierwszych liczb $m$ i $n$ mamy $f(mn) = f(m)f(n)$) zachodzi własność
+$$
+\sum_{n=1}^\infty \frac{f(n)}{n^s} = \prod_{p \in \mathbb{P}} \left(1 + \frac{f(p)}{p^s} + \frac{f(p^2)}{p^{2s}} + \frac{f(p^3)}{p^{3s}} + \cdots \right),
+$$
+gdzie $\mathbb{P}$ jest zbiorem liczb pierwszych. Ta własność wynika z jednoznaczności rozkładu liczb naturalnych na czynniki pierwsze. 
+
+Skorzystajmy z tej własności dla $\varphi(n)$. Dla $s > 2$ mamy
+\begin{align*}
+\sum_{n=1}^\infty \frac{\varphi(n)}{n^s} &= \prod_{p \in \mathbb{P}} \sum_{k=0}^\infty \frac{\varphi(p^k)}{p^{ks}} \\
+&= \prod_{p \in \mathbb{P}} \left(1 + \sum_{k=1}^\infty \frac{p^k - p^{k-1}}{p^{ks}} \right) \\
+&= \prod_{p \in \mathbb{P}} \left(1 + \sum_{k=1}^\infty \frac{p^k}{p^{ks}} - \sum_{k=1}^\infty \frac{p^{k-1}}{p^{ks}} \right) \\
+&= \prod_{p \in \mathbb{P}} \left(\sum_{k=0}^\infty \frac{p^k}{p^{ks}} - \frac{1}{p^s} \sum_{k=0}^\infty \frac{p^k}{p^{ks}} \right) \\
+&= \prod_{p \in \mathbb{P}} \left(1 - \frac{1}{p^s}\right) \sum_{k=0}^\infty \frac{1}{p^{k(s-1)}} \\
+&= \prod_{p \in \mathbb{P}} \left(1 - \frac{1}{p^s}\right) \left(\frac{1}{1-p^{s-1}}\right) \\
+&= \prod_{p \in \mathbb{P}} \frac{1-p^{-s}}{1-p^{1-s}} \\
+\end{align*}
+Możemy przenieść znak mnożenia osobno pod licznik i mianownik ułamka.
+\begin{align*}
+\sum_{n=1}^\infty \frac{\varphi(n)}{n^s} &= \frac{\prod_{p \in \mathbb{P}} (1-p^{-s})}{\prod_{p \in \mathbb{P}}(1-p^{1-s})} \\
+&= \frac{\prod_{p \in \mathbb{P}} \frac{1}{1-\frac{1}{p^{s-1}}}}{\prod_{p \in \mathbb{P}} \frac{1}{1-\frac{1}{p^s}}} \\
+&= \frac{\prod_{p \in \mathbb{P}} \left(1+p^{s-1}+p^{2(s-1)}+p^{3(s-1)}+\cdots\right)}{\prod_{p \in \mathbb{P}} \left(1+p^s+p^{2s}+p^{3s}+\cdots\right)}
+\end{align*}
+Stosując ponownie własność rozkładu szeregu Dirichleta uzyskujemy
+\begin{align*}
+\sum_{n=1}^\infty \frac{\varphi(n)}{n^s} &= \frac{\zeta(s-1)}{\zeta(s)}.
+\end{align*}
+\end{proof}
+
+Udowodnimy teraz pewne klasyczne twierdzenie Eulera.
+\begin{theorem}
+    Niech $\varphi(n)$ będzie funkcją Eulera. Dla dowolnej liczby naturalnej $n$ zachodzi równość
+    $$
+    \sum_{d : d\mid n} \varphi(d) = n.
+    $$
+\end{theorem}
+\begin{proof}
+    Zauważmy, że teza twierdzenia jest równoważna równości
+    $$
+    \varphi * \arithone = \id.
+    $$
+
+    Znamy szeregi Dirichleta wszystkich trzech wymienionych funkcji. Istotnie mamy
+    $$
+    \underbrace{\frac{\zeta(s-1)}{\zeta(s)}}_{\varphi} \cdot \underbrace{\zeta(s)}_{\arithone} = \underbrace{\zeta(s-1)}_{\id}.
+    $$
+\end{proof}
+
+Rozważmy następujące zadanie.
+
+\begin{problem}
+    Znajdź wszystkie funkcje arytmetyczne $a(n)$ takie, że dla każdej liczby naturalnej $n$ zachodzi równość
+    $$
+    \sum_{d : d\mid n} a(d) = \varepsilon(n).
+    $$
+\end{problem}
+\begin{solution}
+    Teza zadania jest równoważna z
+    $$
+    a * \arithone = \varepsilon.
+    $$
+    Niech $f(s)$ będzie szeregiem Dirichleta dla funkcji $a(n)$. W terminach szeregów Dirichleta powyższa równość jest równoważna z
+    $$
+    f(s) \cdot \zeta(s) = 1,
+    $$
+    a zatem $f(s) = \frac{1}{\zeta(s)}$. Znajdźmy wzór jawny funkcji $a(n)$. Skorzystajmy z własności rozkładu szeregu Dirichleta. Mamy
+    \begin{align*}
+    f(s) &= \frac{1}{\zeta(s)} \\
+    &= \frac{1}{\prod_{p \in \mathbb{P}} \left(1 + \frac{1}{p^s} + \frac{1}{p^{2s}} + \cdots\right)} \\
+    &= \frac{1}{\prod_{p \in \mathbb{P}} \frac{1}{1-p^s}} \\
+    &= \prod_{p \in \mathbb{P}} (1-p^s).
+    \end{align*}
+    Stąd wynika, że funkcja $a(n)$ jest zdefiniowana następująco:
+    $$
+    a(n) = \begin{cases} 1, &\text{gdy $n = 1$;} \\ 0, &\text{gdy $n$ jest kwadratem liczby naturalnej;} \\ (-1)^r, &\text{gdy $n = p_1p_2\cdot\ldots\cdot p_r$.} \end{cases}
+    $$
+\end{solution}
+
+Funkcja $a(n)$ będąca rozwiązaniem poprzedniego zadania zwykle jest oznaczana jako $\mu(n)$ i nazywana \emph{funkcją M\"obiusa}. Zachodzi dla niej również następujące twierdzenie.
+
+\begin{theorem}
+    Niech $a(n)$ i $b(n)$ będą takimi funkcjami arytmetycznymi, że
+    $$
+    a(n) = \sum_{d : d \mid n} b(d).
+    $$
+    Wtedy
+    $$
+    b = a * \mu.
+    $$
+\end{theorem}
+\begin{proof}
+    Z założeń twierdzenia wynika, że
+    $$
+    a = b * \arithone,
+    $$
+    więc po obustronnym pomnożeniu (w sensie splotu Dirichleta) przez $\mu$ mamy
+    $$
+    a * \mu = (b * \arithone) * \mu = b * (\arithone * \mu) = b * \varepsilon = b. 
+    $$
+\end{proof}
+
+\newpage
+\section{Zadania}
+
+\begin{problem} \label{problem:zeta1}
+    Czy wyrażeniu $\zeta(1)$ można przypisać rzeczywistą wartość? 
+\end{problem}
+
+%https://ii.uni.wroc.pl/~gst/Komb/k7.pdf
+\begin{problem} \label{problem:multdirichlet}
+    Funkcja $f(n)$ jest \emph{multiplikatywna}, gdy $f(mn) = f(m)f(n)$ dla każdej pary względnie pierwszych liczb $m$, $n$.
+    
+    Pokaż, że splot Dirichleta dwóch funkcji multiplikatywnych jest funkcją multiplikatywną.
+\end{problem}
+
+%https://ii.uni.wroc.pl/~gst/Komb/k7.pdf
+\begin{problem} \label{problem:stronglymultdirichlet}
+    Funkcja $f(n)$ jest \emph{silnie multiplikatywna}, gdy $f (mn) = f (m)f (n)$ dla każdej pary liczb $m$, $n$. Niech $\lambda(n)$ będzie silnie multiplikatywną funkcją taką, że $\lambda(1) = 1$ i $\lambda(p) = -1$ dla wszystkich pierwszych $p$. Pokaż, że
+    $$
+    \sum_{d : d\mid n} \lambda(d) = \begin{cases} 1, &\text{gdy $n$ jest kwadratem liczby naturalnej} \\ 0, &\text{w przeciwnym przypadku.} \end{cases}
+    $$
+    Pokaż też, że
+    $$
+    \frac{\zeta(2s)}{\zeta(s)} = \sum_{n=1}^\infty \frac{\lambda(n)}{n^s}.
+    $$
+\end{problem}
+
+\begin{problem} \label{problem:summufloor}
+    Niech $n$ będzie liczbą naturalną. Oblicz
+    $$
+    \sum_{k=1}^n \mu(k) \left\lfloor \frac{n}{k} \right\rfloor.
+    $$
+\end{problem}
+
+%https://ii.uni.wroc.pl/~gst/Komb/k7.pdf
+\begin{problem} \label{problem:cdsn}
+    Rozważamy koła podzielone na $n$ przystających sektorów (jak w ruletce), z których każdy pomalowany jest jednym z $k$ kolorów. Dwa koła nie są istotnie różne jeśli jedno przechodzi na drugie przez obrót. Niech $s_n$ będzie liczbą takich istotnie różnych kół. Niech $c_n$ będzie liczbą istotnie różnych kół, które nie przechodzą same na siebie przez obrót różny od identyczności.
+
+    Pokaż, że $\sum_{d : d \mid n} c_d = s_n$ i $\sum_{d : d \mid n} dc_d = k^n$.
+    
+    Korzystając ze wzoru inwersyjnego wylicz $c_n$. Pokaż, że $s_n = \sum_{d : d \mid n} \frac{1}{n} \varphi\left(\frac{n}{d}\right)k^d$.
+\end{problem}
+
+\begin{problem} \label{problem:tau3sumtau2}
+    Udowodnij, że dla każdej liczby naturalnej $n$ zachodzi równość
+    $$
+    \sum_{d : d \mid n} (\tau(d))^3 = \left(\sum_{d : d \mid n} \tau(d)\right)^2.
+    $$
+\end{problem}
+
+\begin{problem} \label{problem:pinvdiv}
+    Niech $n$ będzie liczbą naturalną. Udowodnij, że istnieje taki skończony podzbiór zbioru liczb pierwszych $P$, że
+    $$
+    \sum_{p \in P} \frac{1}{p} \geq n.
+    $$
+    Wywnioskuj stąd, że liczb pierwszych jest nieskończenie wiele.
+\end{problem}
+
+\chapter{Metody zaawansowane}
+
+\section{Snake Oil Method}
+
+Metoda Snake Oil pozwala wyznaczać wzory jawne na różnorakie sumy. Schemat działania jest następujący: załóżmy, że mamy znaleźć wzór jawny (w terminach $n$) na sumę
+$$
+\sum_{k=0}^\infty F(k, n).
+$$
+Jak zwykle spróbujmy wyznaczyć funkcję tworzącą ciągu opisanego równaniem z treści zadania. Mamy wtedy
+$$
+f(x) = \sum_{n=0}^\infty \sum_{k=0}^\infty F(k, n) x^n.
+$$
+Zauważmy, że często\footnote{Czasami, jeśli np. $F(k, n) = \frac{(-1)^k}{\lceil k/2 \rceil}$ oraz $x = 1$, sumowanie najpierw względem $k$, a potem względem $n$ jest poprawne, natomiast sumowanie najpierw względem $n$, a potem względem $k$ prowadzi do nieokreślonych wyników. Wtedy opisana metoda nie działa w pełni.} możemy \textbf{zmienić kolejność sumowania} (i do tego w zasadzie sprowadza się cała metoda). Mamy więc dalej
+$$
+f(x) = \sum_{k=0}^\infty \sum_{n=0}^\infty F(k, n) x^n.
+$$
+Jeśli suma $\sum_{n=0}^\infty F(k, n) x^n$ ma zgrabny wzór jawny, to być może suma $\sum_{k=0}^\infty \sum_{n=0}^\infty F(k, n) x^n$ będzie łatwa do obliczenia, a zatem pozwoli nam wyznaczyć $f(x)$.
+
+Nie ma gwarancji, że ta metoda zadziała zawsze -- dostajemy jedynie narzędzie, które ułatwia rozwiązanie pewnej klasy zadań.
+
+Rozwiążmy następujące zadanie.
+
+\begin{problem}
+    Podaj wzór jawny ciągu $(a_n)$ o wyrazie zdefiniowanym jako
+    $$
+    a_n = \sum_{k=0}^n {k \choose n-k} 2^{2k-n} (-1)^{n-k}.
+    $$
+\end{problem}
+\begin{solution}
+    Niech $F(k, n) = {k \choose n-k} 2^{2k-n} (-1)^{n-k}$ i niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$. Wówczas z metody Snake Oil mamy
+    \begin{align*}
+    f(x) &= \sum_{k=0}^\infty \sum_{n=k}^\infty {k \choose n-k} 2^{2k-n} (-1)^{n-k} x^n \\
+    &= \sum_{k=0}^\infty x^k \sum_{n=k}^\infty {k \choose n-k} 2^{2k-n} (-1)^{n-k} x^{n-k}.
+    \end{align*}
+    Zauważmy, że po wyciągnięciu $x^k$ przed wewnętrzną sumę sumowane wyrażenie będzie prostsze, jeśli wprowadzimy nową zmienną $\ell = n-k$. Mamy dalej
+    \begin{align*}
+    f(x) &= \sum_{k=0}^\infty x^k \sum_{n=k}^\infty {k \choose n-k} 2^{2k-n} (-1)^{n-k} x^{n-k} \\
+    &= \sum_{k=0}^\infty x^k \sum_{\ell=0}^\infty {k \choose \ell} 2^{k-\ell} (-1)^{\ell} x^{\ell} \\
+    &= \sum_{k=0}^\infty x^k \sum_{\ell=0}^\infty {k \choose \ell} 2^{k} \left(\frac{-x}{2}\right)^{\ell} \\
+    &= \sum_{k=0}^\infty (2x)^k \sum_{\ell=0}^\infty {k \choose \ell} \left(\frac{-x}{2}\right)^{\ell} \\
+    \end{align*}
+    Nasza podwójna suma jest już na tyle uporządkowana, że możemy zastąpić wewnętrzną sumę przez jej wzór jawny -- jest to po prostu dwumian Newtona. Mamy więc dalej
+    \begin{align*}
+    f(x) &= \sum_{k=0}^\infty (2x)^k \sum_{\ell=0}^\infty {k \choose \ell} \left(\frac{-x}{2}\right)^{\ell} \\
+    f(x) &= \sum_{k=0}^\infty (2x)^k \left(1+\frac{-x}{2}\right)^k \\
+    f(x) &= \sum_{k=0}^\infty \left(2x-x^2\right)^k \\
+    f(x) &= \frac{1}{1-(2x-x^2)} \\
+    f(x) &= \frac{1}{(1-x)^2}.
+    \end{align*}
+    Znamy ciąg o funkcji tworzącej $\frac{1}{(1-x)^2}$ -- jego $n$-ty wyraz to $n+1$ i to jest ostateczna odpowiedź w tym zadaniu.
+\end{solution}
+
+\section{Filtry}
+
+\textbf{Uwaga: } do pełnego zrozumienia tej sekcji warto znać liczby zespolone.
+
+Rozważmy następujące zadanie.
+
+\begin{problem}
+    Oblicz
+    $$
+    {n \choose 0} + {n \choose 2} + {n \choose 4} + \cdots + {n \choose 2\left\lfloor \frac{n}{2} \right\rfloor}.
+    $$
+\end{problem}
+
+Wiemy, że funkcja tworząca zwykłej sumy dwumianów Newtona to
+$$
+f(x) = (1+x)^n = {n \choose 0} + {n \choose 1}x + {n \choose 2}x^2 + \cdots + {n \choose n} x^n,
+$$
+więc gdybyśmy potrafili jakoś ,,usunąć'' z niej wyrazy o nieparzystym wykładniku, to rozwiązalibyśmy dane zadanie.
+
+Zauważmy, że
+$$
+f(-x) = (1-x)^n = {n \choose 0} - {n \choose 1}x + {n \choose 2}x^2 - \cdots + {n \choose n} x^n,
+$$
+a zatem
+$$
+f(x) + f(-x) = 2{n \choose 0} + 2{n \choose 2}x^2 + \cdots + 2{n \choose 2\lfloor n/2 \rfloor}x^{2\lfloor n/2 \rfloor}.
+$$
+
+Mamy więc wynik -- rozwiązaniem zadania jest liczba
+$$
+\frac{f(1)+f(-1)}{2} = \frac{2^n+0}{2} = 2^{n-1}.
+$$
+
+Uogólnijmy nieco dane zadanie. Teraz skupimy się na następującej wersji.
+
+\begin{problem}
+    Oblicz
+    $$
+    {n \choose 0} + {n \choose 3} + {n \choose 6} + \cdots + {n \choose 3\left\lfloor \frac{n}{3} \right\rfloor}
+    $$
+    dla $n = 2024$.
+\end{problem}
+
+Tym razem sztuczka z $-x$ już nie zadziała, ale spróbujmy chociaż zrozumieć dlaczego wcześniej działała. Zauważmy, że
+$$
+x^{n} + (-x)^{n} = \begin{cases} 2x^n, &\text{gdy $n$ jest parzyste;} \\ 0, &\text{gdy $n$ jest nieparzyste.} \end{cases} 
+$$
+
+By zrealizować analogiczną konstrukcję dla podzielności wykładnika przez $3$ potrzebowalibyśmy takich liczb $\varepsilon_1$, $\varepsilon_2$, $\varepsilon_3$, że
+$$
+(\varepsilon_1x)^n + (\varepsilon_2x)^n + (\varepsilon_3x)^n = \begin{cases} 3x^n, &\text{gdy $n$ jest podzielne przez $3$;} \\ 0, &\text{w przeciwnym przypadku.} \end{cases}
+$$
+
+Wśród liczb rzeczywistych nie uda nam się wybrać stosownych $\varepsilon_i$, więc sięgnijmy do większego zbioru liczb -- liczb zespolonych. Wtedy wystarczy by $\varepsilon_i$ były różnymi pierwiastkami z jedności stopnia $3$, czyli liczbami ze zbioru $\{x \in \mathbb{C} : x^3 = 1\}$. Wtedy mamy
+$$
+\varepsilon_1^{3n} + \varepsilon_2^{3n} + \varepsilon_3^{3n} = 1^n + 1^n + 1^n = 3.
+$$
+Dla $n$ niepodzielnych przez $3$ łatwo sprawdzić, że $\varepsilon_i^n$ również będzie pierwiastkiem z jedności stopnia $3$, ponieważ $(\varepsilon_i^n)^3 = (\varepsilon_i^3)^n = 1^n = 1$. Ponadto dla $i \neq j$ mamy $\varepsilon_i^n \neq \varepsilon_j^n$, ponieważ dzieląc obie strony przez $\varepsilon_j^n$ otrzymujemy równoważną nierówność $\left(\frac{\varepsilon_i}{\varepsilon_j}\right)^n \neq 1$.
+
+Oznacza to, że dla dowolnego $n$ niepodzielnego przez $3$ zachodzi następująca równość zbiorów
+$$
+\{\varepsilon_1^{n}, \varepsilon_2^{n}, \varepsilon_3^{n}\} = \{\varepsilon_1, \varepsilon_2, \varepsilon_3\},
+$$
+a zatem
+$$
+\varepsilon_1^{n} + \varepsilon_2^{n} + \varepsilon_3^{n} = \varepsilon_1 + \varepsilon_2 + \varepsilon_3.
+$$
+Wyznaczmy teraz sumę $\varepsilon_1 + \varepsilon_2 + \varepsilon_3$. Wiemy, że przemnożenie tej sumy przez $\varepsilon_i$ da nam dokładnie taki sam wynik, ponieważ
+$$
+\{\varepsilon_1 \cdot \varepsilon_i, \varepsilon_2 \cdot \varepsilon_i, \varepsilon_3 \cdot \varepsilon_i\} = \{\varepsilon_1, \varepsilon_2, \varepsilon_3\},
+$$
+wobec tego przyjmując $\varepsilon_i \neq 1$ mamy
+$$
+(1-\varepsilon_i)(\varepsilon_1 + \varepsilon_2 + \varepsilon_3) = 0,
+$$
+czyli
+$$
+\varepsilon_1 + \varepsilon_2 + \varepsilon_3 = 0.
+$$
+
+Skoro pokazaliśmy, że liczby $\varepsilon_i$ o żądanych własnościach istnieją (przynajmniej jako liczby zespolone), to rozwiążmy uogólnioną wersję zadania.
+
+Niech $f(x) = (1+x)^n$. Mamy
+$$
+\frac{f(\varepsilon_1x) + f(\varepsilon_2x) + f(\varepsilon_3x)}{3} = \frac13\sum_{k=0}^n {n \choose k} \left(\varepsilon_1^{k} + \varepsilon_2^{k} + \varepsilon_3^{k}\right) x^k = \frac13\sum_{\substack{k=0 \\ 3 \mid k}}^n {n \choose k} 3 x^k = \sum_{\substack{k=0 \\ 3 \mid k}}^n {n \choose k} x^k.
+$$
+Z drugiej strony mamy
+$$
+\frac{f(\varepsilon_1x) + f(\varepsilon_2x) + f(\varepsilon_3x)}{3} = \frac{(1+\varepsilon_1)^n + (1+\varepsilon_2)^n + (1+\varepsilon_3)^n}{3}.
+$$
+Przyjmijmy, że $\varepsilon_1 = 1$ (bo $1$ jest pierwiastkiem trzeciego stopnia z $1$). Mamy więc
+$$
+\frac{(1+\varepsilon_1)^n + (1+\varepsilon_2)^n + (1+\varepsilon_3)^n}{3} = \frac{2^n + (\varepsilon_1 + \varepsilon_2)^n + (\varepsilon_1 + \varepsilon_3)^n}{3} = \frac{2^n + (-\varepsilon_3)^n + (-\varepsilon_2)^n}{3}.
+$$
+Skoro $n = 2024$, to $(-\varepsilon_i)^n = (-1)^{2024} \cdot \varepsilon_i^{2024} = \varepsilon_i^{2024}$. Wynik będzie więc równy
+$$
+\frac{2^{2024} + \varepsilon_3^{2024} + \varepsilon_2^{2024}}{3} = \frac{2^{2024} - \varepsilon_1^{2024}}{3} = \frac{2^{2024}-1}{3}.
+$$
+
+\section{Zbieżność funkcji tworzących} \label{section:convergence}
+
+Na początku pracy, przy definiowaniu funkcji tworzących, zastrzegliśmy, że zwykle będziemy zainteresowani jedynie samym \emph{napisem} $\sum_{n=0}^\infty a_nx^n$ i jego własnościami algebraicznymi, a niekoniecznie podstawianiem konkretnych wartości $x$ i obliczaniem tej sumy dla konkretnych liczb.
+
+W tej sekcji opiszemy dokładniej kiedy i jakie wartości $x$ można podstawiać do funkcji tworzących. Rozpoczniemy od prostych obserwacji.
+
+\begin{remark} \label{remark:subst0}
+    Niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$. Wyrażenie $f(0)$ ma rzeczywistą wartość.
+\end{remark}
+\begin{proof}
+    $$f(0) = \sum_{n=0}^\infty a_n 0^n = a_0.$$
+\end{proof}
+
+\begin{remark}
+    Niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$. Jeśli od pewnego miejsca ciąg $(a_n)$ jest stale równy zero, to wyrażenie $f(p)$ istnieje dla dowolnego rzeczywistego $p$.
+\end{remark}
+\begin{proof}
+    Jeśli od pewnego miejsca ciąg $(a_n)$ jest stale równy zero, to funkcja tworząca jest skończoną sumą, tak więc niezależnie od wartości podstawianej do $x$, będziemy liczyć sumę skończenie wielu liczb rzeczywistych.
+\end{proof}
+
+W nawiązaniu do obserwacji \ref{remark:subst0} możemy się zastanowić czy istnieje taki ciąg $(a_n)$, że prawidłowym argumentem jego funkcji tworzącej $f(x)$ będzie tylko $x = 0$. Okazuje się, że tak.
+
+\begin{example}
+    Funkcja tworząca ciągu $(a_n)$ o wyrazie zdefiniowanym jako $a_n = 2^{(n^2)}$ jest nieokreślona dla wszystkich argumentów poza zerem.
+\end{example}
+\begin{proof}
+    Niech $f(x)$ będzie funkcją tworzącą ciągu $(a_n)$ z tezy przykładu. Mamy
+    \begin{align*}
+        f(x) &= \sum_{n=0}^\infty a_nx^n \\
+        &= \sum_{n=0}^\infty 2^{(n^2)}x^n \\
+        &= \sum_{n=0}^\infty \left(2^nx\right)^n.
+    \end{align*}
+    Niech $p$ będzie dowolną niezerową liczbą rzeczywistą. Wtedy istnieje takie $n$, że $|2^np| \geq 1$ (wystarczy wziąć $n > \log_2 |1/p|$), tak więc od pewnego miejsca w sumie określającej $f(p)$ będziemy sumować ze sobą liczby o module większym od $1$, co nie może dać nam skończonego wyniku. 
+\end{proof}
+
+By przejść dalej w rozważaniach potrzebujemy odpowiednio precyzyjnego języka, którego dostarczą nam poniższe definicje.
+
+\begin{definition}
+    Ciąg nieskończony $(s_n)$ jest \emph{zbieżny}, gdy istnieje taka liczba rzeczywista $\ell$, że dla dowolnej liczby rzeczywistej $\varepsilon > 0$ istnieje taka pozycja $N$ w ciągu $(s_n)$ ($N$ to liczba naturalna), że dla każdej późniejszej pozycji $n > N$ zachodzi warunek
+    $$
+    |s_n - \ell| < \varepsilon.
+    $$
+\end{definition}
+
+\begin{definition}
+    Szereg\footnote{\emph{Szereg} to, w skrócie, dostojniejsze słowo na sumę nieskończoną.} $\sum_{n=0}^\infty t_n$ jest \emph{zbieżny}, jeśli ciąg sum częściowych $(s_n)$ zdefiniowany jako
+    $$
+    s_n = t_0 + t_1 + t_2 + \cdots + t_n
+    $$
+    jest zbieżny.
+\end{definition}
+
+Udowodnimy teraz pewne kryterium, które pozwala nam dowodzić zbieżność $f(x)$ na niektórych wartościach $x$ w zależności od ciągu tej funkcji tworzącej.
+
+\begin{theorem}[wariant kryterium d'Alemberta] \label{thm:alembert}
+    Niech $f(x)$ będzie funkcją tworzącą ciągu liczb dodatnich $(a_n)$. Niech $p$ będzie liczbą rzeczywistą. Jeśli istnieje taka liczba naturalna $N$ oraz dodatnia liczba rzeczywista $r < 1$, że dla każdego $n > N$ zachodzi warunek
+    $$
+    \left|\frac{pa_{n+1}}{a_n}\right| \leq r,
+    $$
+    to $f(p)$ jest szeregiem zbieżnym.
+\end{theorem}
+\begin{proof}
+    Mamy
+    \begin{align*}
+        f(p) &= \sum_{n=0}^\infty a_np^n \\
+        &= \sum_{n=0}^N a_np^n + \sum_{n=N+1}^\infty a_np^n \\
+        &= \sum_{n=0}^N a_np^n + p^N\sum_{n=1}^\infty a_{n+N}p^n.
+    \end{align*}
+    Pokażemy, że szereg $\sum_{n=1}^\infty a_{n+N}p^n$ jest zbieżny -- to wystarczy do pokazania, że $f(p)$ jest szeregiem zbieżnym, ponieważ $\sum_{n=0}^N a_np^n$ jest sumą skończonej liczby składników. Niech $K$ i $L$ będą liczbami naturalnymi takimi, że $K < L$. Mamy
+    \begin{align*}
+        \left|\sum_{n=K}^L a_{n+N}p^n\right| &= \left|\sum_{n=K}^L a_N \cdot \frac{pa_{N+1}}{a_N} \cdot \frac{pa_{N+2}}{a_{N+1}} \cdot \ldots \cdot \frac{pa_{N+n}}{a_{N+n-1}}\right| \\
+        &\leq |a_N|\sum_{n=K}^L \left|\frac{pa_{N+1}}{a_N}\right| \cdot \left|\frac{pa_{N+2}}{a_{N+1}}\right| \cdot \ldots \cdot \left|\frac{pa_{N+n}}{a_{N+n-1}} \right| \\
+        &\leq |a_N|\sum_{n=K}^L \underbrace{|r| \cdot |r| \cdot \ldots \cdot |r|}_n \\
+        &\leq |a_N|\sum_{n=K}^L |r|^n = |a_N||r|^K\sum_{n=0}^{L-K} |r|^n \\
+        &\leq |a_N||r|^K \frac{1}{1-|r|}.
+    \end{align*}
+    Powyższe wyrażenie dąży do zera, gdy $K$ dąży do nieskończoności. To oznacza, że w ciągu sum częściowych $f(p)$ dwa dowolne elementy, jeśli mają dostatecznie wysokie indeksy, są dowolnie blisko siebie -- ta własność nazywa się \emph{warunkiem Cauchy'ego}.
+
+    Okazuje się, że jeśli ciąg sum częściowych szeregu spełnia warunek Cauchy'ego, to cały szereg jest zbieżny. Dowód pozostawiamy jako ćwiczenie dla Czytelnika.
+\end{proof}
+
+Skorzystamy z tego twierdzenia przy rozwiązaniu następującego zadania.
+
+\begin{problem} \label{problem:fibo1/4}
+Niech $F_n$ będzie $n$-tą liczbą Fibonacciego. Oblicz
+$$
+\sum_{n=0}^\infty \frac{F_n}{4^n}.
+$$
+\end{problem}
+\begin{solution} 
+Z poprzednich rozdziałów wiemy, że funkcją tworzącą ciągu Fibonacciego jest
+$$
+f(x) = \frac{x}{1-x-x^2}.
+$$
+
+Ponadto wiemy, że $F_{n+1} = F_n+F_{n-1}$ i że ciąg Fibonacciego jest niemalejący. Korzystając z tych faktów możemy pokazać, że zachodzą założenia twierdzenia \ref{thm:alembert}. Dla $p = 1/4$ i dowolnego $n > 1$ mamy
+$$
+\left|\frac{pF_{n+1}}{F_n}\right| =\left|\frac14 \cdot \frac{F_n + F_{n-1}}{F_n}\right| = \left|\frac14 \cdot \left(1 + \frac{F_{n-1}}{F_n}\right)\right| \leq \left|\frac14 \cdot \left(1 + 1\right)\right| = \frac12.
+$$
+
+Wobec tego $f\left(\frac14\right)$ jest szeregiem zbieżnym i możemy go obliczyć. Mamy
+$$
+f\left(\frac14\right) = \frac{\frac14}{1-\frac14-\left(\frac14\right)^2} = \frac{4}{11}.
+$$
+\end{solution}
+
+\newpage
+\section{Zadania}
+\begin{problem} \label{problem:snake1}
+    Wyznacz wzór jawny na sumę
+    $$
+    \sum_{k=0}^n {k \choose n-k}.
+    $$
+\end{problem}
+\begin{problem} \label{problem:snake2}
+    Wyznacz wzór jawny na sumę
+    $$
+    \sum_{k=0}^n {n+k \choose 2k} 2^{n-k}.
+    $$
+\end{problem}
+\begin{problem} \label{problem:snake3}
+    Wyznacz wzór jawny na sumę
+    $$
+    \sum_{k=m}^n {n \choose k}{k \choose m}.
+    $$
+\end{problem}
+\begin{problem} \label{problem:snake4}
+    Wyznacz wzór jawny na sumę
+    $$
+    \sum_{k=0}^n {2k \choose k}{n \choose k} \left(-\frac14\right)^k.
+    $$
+\end{problem}
+
+\begin{problem} \label{problem:subsets17}
+Wyznacz liczbę podzbiorów zbioru $\{1, 2, \ldots, 2024\}$, których sumy są podzielne przez $17$.
+\end{problem}
+
+\begin{problem} \label{problem:arithprogdiv}
+Wszystkie liczby naturalne zostały podzielone na $k \geq 2$ ciągów arytmetycznych w taki sposób, że każda liczba naturalna należy do dokładnie jednego z nich, a wszystkie wyrazy początkowe i różnice tych ciągów są całkowite. 
+
+Niech $r_1, r_2, \ldots, r_k$ oznaczają różnice przedmiotowych ciągów arytmetycznych. Udowodnij, że pewne dwie spośród tych różnic są równe oraz udowodnij poniższą równość
+$$
+\frac{1}{r_1} + \frac{1}{r_2} + \cdots + \frac{1}{r_k} = 1.
+$$
+\end{problem}
+
+\begin{problem} \label{problem:formaldef}
+Udowodnij, że jeśli funkcje tworzące $f(x)$ i $g(x)$ mają zwarte wzory (w myśl definicji \ref{def:expr}), to funkcja tworząca $(f\cdot g)(x)$ ma zwarty wzór równy iloczynowi wzorów na $f(x)$ i $g(x)$.
+\end{problem}
+
+\begin{problem} \label{problem:formaldefeq}
+Udowodnij, że jeśli funkcje tworzące $f(x)$ i $g(x)$ mają zwarte wzory (w myśl definicji \ref{def:expr}), to funkcje $f(x)$ i $g(x)$ są równe w sensie definicji \ref{def:rowne} wtedy i tylko wtedy, gdy ich zwarte wzory są równe.
+\end{problem}
+
+\begin{problem} \label{problem:formaldefinfties}
+Udowodnij, że istnieje taki ciąg zerojedynkowy $(a_n)$, że jego funkcja tworząca $f(x)$ nie ma zwartego wzoru.
+\end{problem}
+
+\chapter{Wskazówki do zadań}
+
+\begin{enumerate}
+
+\item[\ref{problem:k2newton}] Niech $g(x) = \sum{k=0}^n {n \choose k} x^k$. Rozważ $h(x) = xg'(x)$, a następnie $xh'(x)$.
+
+\item[\ref{problem:newtonprod}] Użyj faktu ${n \choose k} = {n \choose n-k}$.
+
+\item[\ref{problem:receq1}] Niech $f(x) = \frac{\frac{x^3}{1-3x}}{1-5x+3x^2+x^3}$.
+
+\item[\ref{problem:receq2}] Niech $f(x) = \frac{\frac{x^2}{1-4x}}{1-2x+x^2}$.
+
+\item[\ref{problem:rectanglefilling}] Zapisz zależność rekurencyjną na szukaną liczbę sposobów dla $2 \times n$, odnosząc się do wyników dla $2 \times (n-1)$ oraz $2 \times (n-2)$.
+
+\item[\ref{problem:abcd}] Niech $f(x) = \underbrace{\frac{1}{1-x^2}}_{\text{Adam}} \cdot \underbrace{\frac{1}{1-x^6}}_{\text{Bartek}} \cdot \underbrace{(1+x+x^2+x^3+x^4+x^5)}_{\text{Czarek}} \cdot \underbrace{(1+x)}_{\text{Darek}}$.
+
+\item[\ref{problem:partitions}] Niech $f(x) = \frac{1}{1-x} \cdot \frac{1}{1-x^3} \cdot \frac{1}{1-x^5} \cdot \ldots$. $g(x) = (1+x)(1+x^2)(1+x^3)\cdot\ldots$. Udowodnij, że $f(x) = g(x)$.
+
+\item[\ref{problem:logfun}] Dla liczb $t$ bliskich zeru zachodzi własność $t \approx \log(1+t)$. Znajdź pochodną funkcji $\log(1+t)$ z definicji i wykorzystaj w rozwiązaniu.
+
+\item[\ref{problem:ternary}] Niech $f(x) = (x^{-3} + 1 + x^{3})(x^{-9} + 1 + x^{9})(x^{-27} + 1 + x^{27})\cdot\ldots$.
+
+\item[\ref{problem:poly2}] Napisz funkcję tworzącą, której $n$-ty wyraz odpowiada liczbie wielomianów szukanej w zadaniu. Skorzystaj w tym celu z czynników postaci $\left(1 + x^{2^k} + x^{2 \cdot 2^k} + x^{3 \cdot 2^k}\right)$ i skróć wynik.
+
+\item[\ref{problem:cauchyidp}] Skorzystaj z własności splotu Cauchy'ego i uogólnionego dwumianu Newtona.
+
+\item[\ref{problem:subsetprod}] Niech $f(x) = \prod_{s \in S} (1 + sx)$. Co oznacza $f(1)$?
+
+\item[\ref{problem:rs}] Niech $f(x) = \sum_{a \in A} x^a$ i $g(x) = \sum_{b \in B} x^b$. Co wiemy o funkcji $f(x)+g(x)$? Jak przedstawić warunek $r_A(n) = r_B(n)$ za pomocą $f(x)$ i $g(x)$?
+
+\item[\ref{problem:qs}] Niech $f(x) = \sum_{a \in A} x^a$. Co wynika z $f(x)^2 = f(x)+ax$ dla pewnego całkowitego $a$? Czy wzór na $f(x)$ nie przypomina liczb Catalana?
+
+\item[\ref{problem:partitions23}] Niech $f(x) = \prod_{n=1}^\infty \left(\frac{1}{1-x^n}-x\right)$. Niech $g(x) = \prod_{2\mid n \vee 3\mid n} \frac{1}{1-x^n}$. Udowodnij, że $f(x) = g(x)$.
+
+\item[\ref{problem:klm}] Niech $f(x) = x + 2x^2 + 3x^3 + \cdots$. Warto rozpatrzyć $f(x)^3$.
+
+\item[\ref{problem:seqpart}] Sklasyfikujmy wszystkie podziały zbioru $\{1, 2, \ldots, n+1\}$ na ciągi względem długości ciągu, w którym znajduje się $1$. 
+
+\item[\ref{problem:derangements}] Podzielmy wszystkie nieporządki zbioru $\{1, 2, \ldots, n\}$ względem długości cyklu, w którym znajduje się $1$.
+
+\item[\ref{problem:permunitysqroot}] Jakie mogą być długości cykli takiej permutacji? Jaka wynika stąd zależność rekurencyjna?
+
+\item[\ref{problem:avgnocyc}] Podzielmy wszystkie permutacje zbioru $\{1, 2, \ldots, n\}$ względem długości cyklu, w którym znajduje się $1$.
+
+\item[\ref{problem:expcubed}] Niech $f(x) = \sum_{a \in A} \frac{x^a}{a!}$. Co oznacza $f(x)^3$?
+
+\item[\ref{problem:diffeq}] Pochodna wykładniczej funkcji tworzącej odpowiada przesunięciu.
+
+\item[\ref{problem:zeta1}] W sumie $\zeta(1)$ ogranicz $\frac{1}{n}$ z dołu przez $\frac{1}{2^k}$ dla $k = \left\lceil \log_2 n\right\rceil$.
+
+\item[\ref{problem:multdirichlet}] Jeśli $D_m$ i $D_n$ są zbiorami dzielników odpowiednio $m$ i $n$ oraz te liczby są względnie pierwsze, to $D_{mn}$ ma silny związek z $D_m \times D_n$.
+
+\item[\ref{problem:stronglymultdirichlet}] Dla ustalonej liczby $n$ spróbuj połączyć jej dzielniki w pary $(d, n/d)$. W drugiej części zadania skorzystaj z metody rozkładu szeregu Dirichleta.
+
+\item[\ref{problem:summufloor}] $\left\lfloor \frac{n}{k} \right\rfloor = \{m \in \mathbb{N} : m \leq n, k \mid m\}$.
+
+\item[\ref{problem:cdsn}] Każde koło podzielone na $n$ przystających sektorów, z których każdy jest pokolorowany na jeden z $k$ kolorów ma jednoznaczny \emph{okres}, czyli długość najkrótszego fragmentu koła, który powielony odpowiednio wiele razy jest całym kołem. Udowodnij, że tak jest i zauważ jakie mogą być możliwe okresy.
+
+\item[\ref{problem:tau3sumtau2}] Korzystaj ze splotów Dirichleta.
+
+\item[\ref{problem:pinvdiv}] Skorzystaj z tego, że $\zeta(1) \to \infty$ oraz z metody rozkładu szeregu Dirichleta.
+
+\item[\ref{problem:snake1}] Skorzystaj z metody Snake Oil, $\ell = n-k$.
+
+\item[\ref{problem:snake2}] Skorzystaj z metody Snake Oil, $\ell = n-k$.
+
+\item[\ref{problem:snake3}] Skorzystaj z metody Snake Oil; zauważ dla wygody, że $\sum_{k=m}^n {n \choose k}{k \choose m} = \sum_{k=0}^\infty {n \choose k}{k \choose m}$.
+
+\item[\ref{problem:snake4}] Skorzystaj z metody Snake Oil.
+
+\item[\ref{problem:subsets17}] Niech $f(x) = (x+x^2+x^3+\cdots+x^{2024})^{2024}$. Filtry.
+
+\item[\ref{problem:arithprogdiv}] Niech $f_i(x) = \sum_{n=0}^\infty x^{a_i + nr_i}$. Zauważ, że $\prod_{i=1}^k f_i(x) = \frac{1}{1-x}$.
+
+\item[\ref{problem:formaldef}] Skorzystaj z tego, że iloczyn ciągów zbieżnych jest ciągiem zbieżnym i pokaż, że analogiczna własność zachodzi dla iloczynu szeregów (iloczynu w sensie splotu Cauchy'ego, nie mnożenia ze sobą kolejnych par wyrazów).
+
+\item[\ref{problem:formaldefeq}] Trudniejszą częścią jest pokazanie, że z równości zwartych wzorów wynika równość w sensie definicji \ref{def:rowne} -- załóż nie wprost, że ciągi reprezentowane przez $f(x)$ i $g(x)$ są równe i zbadaj własności różnicy tych ciągów.
+
+\item[\ref{problem:formaldefinfties}] Pokaż, że funkcji tworzących jest więcej, niż zwartych wzorów.
+
+
+
+\end{enumerate}
 
 \bibliographystyle{plain}
 \bibliography{refs}
